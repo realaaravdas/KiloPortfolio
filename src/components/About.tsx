@@ -5,7 +5,7 @@ const points = [
   {
     icon: Cpu,
     title: 'Robotics-first',
-    body: 'Three years on an FRC team building vision and localization systems, with hands-on time across CAD, electrical, and mechanical.',
+    body: 'Four years on an FRC team building vision and localization systems, with hands-on time across CAD, electrical, and mechanical.',
   },
   {
     icon: Rocket,

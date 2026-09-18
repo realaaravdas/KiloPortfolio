@@ -6,11 +6,11 @@ export const profile = {
   github: 'https://github.com/realaaravdas',
   githubHandle: 'realaaravdas',
   summary:
-    "I build software and robots — from computer vision pipelines that let a robot see, to full-stack tools that ship to real users. Freshman at UC Santa Cruz studying Robotics Engineering, with three years leading the code and computer vision team on an FRC robotics team and a summer building enterprise observability tooling at an AI startup.",
+    "I build software and robots — from computer vision pipelines that let a robot see, to full-stack tools that ship to real users. Freshman at UC Santa Cruz studying Robotics Engineering, with four years leading the code and computer vision team on an FRC robotics team and a summer building enterprise observability tooling at an AI startup.",
 }
 
 export const stats = [
-  { label: 'Years on FRC Code Team', value: '3+' },
+  { label: 'Years on FRC Code Team', value: '4+' },
   { label: 'Personal Projects Shipped', value: '5' },
   { label: 'Internship', value: 'CurieTech AI' },
   { label: 'Published Paper', value: '1' },
@@ -78,6 +78,20 @@ export const projects: Project[] = [
       'Designed the collection mechanism and navigation logic end to end, from hardware to software.',
     ],
     tags: ['SLAM', 'mmWave Radar', 'Computer Vision', 'Raspberry Pi', 'Python'],
+    featured: true,
+  },
+  {
+    title: 'Rust Racer',
+    period: 'Personal Project',
+    description:
+      'A 3D arcade racing game built from scratch in Rust with the Bevy engine and Rapier physics — every circuit, its terrain, and its track layout are procedurally generated at race time.',
+    bullets: [
+      'Procedurally generates a fresh 3,200×3,200-unit heightfield terrain and a closed-loop track of 24–40 waypoints each race, with a single deterministic height function shared by the render mesh and physics collider so they never desync.',
+      'Wrote custom force-based vehicle physics — engine force, drag, cornering grip, drifting, downforce, and terrain-normal self-righting torque to keep cars oriented to the ground.',
+      'Built 12 AI opponents across three performance tiers with waypoint navigation, blocking behavior, and stuck-detection recovery.',
+      'Implemented a chase camera with a live minimap overlay and a Tesla-style HUD showing speed, drift/brake state, and live race placement.',
+    ],
+    tags: ['Rust', 'Bevy', 'Rapier Physics', 'Game Dev', 'Procedural Generation'],
     featured: true,
   },
   {
@@ -158,7 +172,7 @@ export const education: EducationItem[] = [
     school: 'Saint Francis High School',
     location: 'Mountain View, CA',
     period: 'August 2022 – May 2026',
-    detail: '4 APs + dual-enrollment coursework · Honor Roll · ACT: 34',
+    detail: '3 APs + dual-enrollment coursework · Honor Roll · ACT: 34',
     bullets: [
       'AP Calculus AB, AP Physics C: Mechanics, Computer Science 1A, AP Computer Science Principles.',
     ],
@@ -168,7 +182,7 @@ export const education: EducationItem[] = [
 export const skills: { category: string; items: string[] }[] = [
   {
     category: 'Languages',
-    items: ['Python', 'Java', 'C++', 'SQL', 'Bash / Shell'],
+    items: ['Python', 'Java', 'C++', 'Rust', 'SQL', 'Bash / Shell'],
   },
   {
     category: 'AI & Machine Learning',
@@ -222,12 +236,18 @@ export const publication = {
   title: 'The Ethics and Legal Treatment Which Should Govern Artificial Intelligence',
   publisher: 'Curieux Academic Journal',
   date: 'October 2024',
+  page: 'p. 55',
   url: 'https://www.curieuxacademicjournal.com/_files/ugd/99711c_95397c2ad29e43af88a4539dd7344073.pdf',
   abstract:
     'Proposes a universal method for distinguishing natural humans from artificial beings based on the capacity to perform evolution, and a corresponding framework governments could use to enforce laws and penalize AI systems.',
 }
 
 export const activities = [
+  {
+    name: 'FRC — Team 2367, Lancer Robotics',
+    period: 'Aug 2022 – May 2026',
+    detail: 'Hybrid member across CAD, Mechanical, Electrical, and Code — comfortable with chop saw, band saw, 3D printing, and laser cutting for hands-on builds.',
+  },
   {
     name: 'Machine Learning & AI Club',
     period: 'Aug 2022 – May 2026',
