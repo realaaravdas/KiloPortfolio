@@ -47,6 +47,7 @@ export const experience: Experience[] = [
     location: 'Mountain View, CA',
     period: 'August 2022 – May 2026',
     bullets: [
+      'Won 1st place with our alliance at the Central Valley District/Regional competition (2026).',
       "Led early-stage development of one of the team's first fully autonomous robot navigation systems — built and trained the core computer vision and localization models to roughly 50% completion before shelving the project due to hardware constraints.",
       'Programmed and trained models for competition tasks using ROS and enterprise robotics tooling.',
       'Mentored younger students at elementary schools on coding, robot design, and driving practice.',
@@ -246,7 +247,7 @@ export const activities = [
   {
     name: 'FRC — Team 2367, Lancer Robotics',
     period: 'Aug 2022 – May 2026',
-    detail: 'Hybrid member across CAD, Mechanical, Electrical, and Code — comfortable with chop saw, band saw, 3D printing, and laser cutting for hands-on builds.',
+    detail: 'Hybrid member across CAD, Mechanical, Electrical, and Code; our alliance placed 1st at the 2026 Central Valley District/Regional competition.',
   },
   {
     name: 'Machine Learning & AI Club',

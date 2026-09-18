@@ -36,6 +36,7 @@ Stack: React, AWS, Helm, Kubernetes, Grafana, REST APIs
 
 ### Code Team & Computer Vision Lead, Aux. Board Member, FIRST Robotics Competition — Team 2367, Lancer Robotics (Mountain View, CA, August 2022 – May 2026)
 
+- Won 1st place with our alliance at the Central Valley District/Regional competition (2026).
 - Led early-stage development of one of the team's first fully autonomous robot navigation systems — built and trained the core computer vision and localization models to roughly 50% completion before shelving the project due to hardware constraints.
 - Programmed and trained models for competition tasks using ROS and enterprise robotics tooling.
 - Mentored younger students at elementary schools on coding, robot design, and driving practice.
@@ -119,7 +120,7 @@ Self-reported.
 
 ## Also involved in
 
-- FRC — Team 2367, Lancer Robotics — Hybrid member across CAD, Mechanical, Electrical, and Code — comfortable with chop saw, band saw, 3D printing, and laser cutting for hands-on builds. (Aug 2022 – May 2026)
+- FRC — Team 2367, Lancer Robotics — Hybrid member across CAD, Mechanical, Electrical, and Code; our alliance placed 1st at the 2026 Central Valley District/Regional competition. (Aug 2022 – May 2026)
 - Machine Learning & AI Club — Researched advances in ML and computer vision for object recognition; trained models for club projects. (Aug 2022 – May 2026)
 - Aerospace Club at Saint Francis — Co-President — co-led pilot talks and airport tours; presented projects on space and green aviation. (Aug 2022 – May 2026)
 - Second Harvest Food Bank of Silicon Valley — Volunteer sorting food for families in need — contributed to helping roughly 35,000 people over the years. (Aug 2022 – Jun 2026)
