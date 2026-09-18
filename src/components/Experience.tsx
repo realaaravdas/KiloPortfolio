@@ -1,5 +1,6 @@
 import { MapPin } from 'lucide-react'
 import SectionHeading from './SectionHeading'
+import Reveal from './Reveal'
 import { experience } from '../data/resume'
 
 export default function Experience() {
@@ -12,10 +13,12 @@ export default function Experience() {
       />
 
       <div className="space-y-6">
-        {experience.map((job) => (
-          <article
+        {experience.map((job, i) => (
+          <Reveal
             key={job.role + job.org}
-            className="rounded-lg border border-border bg-surface p-6 sm:p-8"
+            delay={i * 100}
+            as="article"
+            className="lift-on-hover rounded-lg border border-border bg-surface p-6 sm:p-8"
           >
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
@@ -50,7 +53,7 @@ export default function Experience() {
                 </span>
               ))}
             </div>
-          </article>
+          </Reveal>
         ))}
       </div>
     </section>

@@ -1,5 +1,6 @@
 import { Sparkles } from 'lucide-react'
 import SectionHeading from './SectionHeading'
+import Reveal from './Reveal'
 import { projects } from '../data/resume'
 
 export default function Projects() {
@@ -12,10 +13,12 @@ export default function Projects() {
       />
 
       <div className="grid sm:grid-cols-2 gap-6">
-        {projects.map((p) => (
-          <article
+        {projects.map((p, i) => (
+          <Reveal
             key={p.title}
-            className={`group relative flex flex-col rounded-lg border p-6 sm:p-7 transition-colors ${
+            delay={i * 80}
+            as="article"
+            className={`group relative flex flex-col lift-on-hover rounded-lg border p-6 sm:p-7 transition-colors ${
               p.featured ? 'border-accent/40 bg-surface-2' : 'border-border bg-surface'
             } hover:border-accent/60`}
           >
@@ -52,7 +55,7 @@ export default function Projects() {
                 </span>
               ))}
             </div>
-          </article>
+          </Reveal>
         ))}
       </div>
 

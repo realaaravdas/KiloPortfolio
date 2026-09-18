@@ -5,15 +5,14 @@
   --font-sans: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-  --color-bg: #090c12;
-  --color-surface: #10151f;
-  --color-surface-2: #161c29;
-  --color-border: #232b3b;
-  --color-ink: #e7ebf3;
-  --color-muted: #8b95a8;
+  --color-bg: #000000;
+  --color-surface: #0d0d0d;
+  --color-surface-2: #141414;
+  --color-border: rgb(255 255 255 / 12%);
+  --color-ink: #ffffff;
+  --color-muted: rgb(255 255 255 / 58%);
   --color-accent: #38f0d8;
-  --color-accent-soft: #38f0d833;
-  --color-accent-2: #7c8bff;
+  --color-accent-soft: rgb(56 240 216 / 14%);
 }
 
 @layer base {
@@ -51,4 +50,145 @@
   .text-glow {
     text-shadow: 0 0 32px var(--color-accent-soft);
   }
+
+  .lift-on-hover {
+    transition: transform 0.25s ease;
+  }
+  .lift-on-hover:hover {
+    transform: translateY(-4px);
+  }
+}
+
+/* ---- Scroll reveal (moonshot-style fade + rise) ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---- Pill CTA with sliding arrow (moonshot-style) ---- */
+.cta-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 42%);
+  background: transparent;
+  color: rgb(255 255 255 / 62%);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s,
+    color 0.2s,
+    padding 0.2s;
+}
+.cta-pill .cta-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0;
+  margin-left: 0;
+  opacity: 0;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition:
+    width 0.2s ease,
+    opacity 0.2s ease,
+    margin-left 0.2s ease;
+}
+.cta-pill:hover {
+  border-color: #fff;
+  background: rgb(255 255 255 / 6%);
+  color: #fff;
+  padding: 12px 12px 12px 20px;
+}
+.cta-pill:hover .cta-arrow {
+  width: 18px;
+  margin-left: 8px;
+  opacity: 1;
+}
+
+.cta-pill-solid {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: #04110d;
+}
+.cta-pill-solid:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: #04110d;
+  opacity: 0.88;
+}
+
+/* ---- Custom cursor (ported from moonshot.ai's ring + dot) ---- */
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: translate, opacity;
+  width: 36px;
+  height: 36px;
+  margin-left: -18px;
+  margin-top: -18px;
+  border-radius: 50%;
+  border: 1.5px solid rgb(255 255 255 / 55%);
+  opacity: 0;
+  scale: 1;
+  transition:
+    scale 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease,
+    background-color 0.35s ease,
+    opacity 0.3s ease;
+}
+.cursor-ring.is-hover {
+  scale: 1.55;
+  border-color: var(--color-accent);
+  background-color: var(--color-accent-soft);
+}
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: translate, opacity;
+  width: 5px;
+  height: 5px;
+  margin-left: -2.5px;
+  margin-top: -2.5px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+@media (hover: none), (pointer: coarse) {
+  .cursor-ring,
+  .cursor-dot {
+    display: none;
+  }
+}
+.cursor-active,
+.cursor-active * {
+  cursor: none !important;
 }

@@ -1,5 +1,6 @@
 import { FileText, GraduationCap } from 'lucide-react'
 import SectionHeading from './SectionHeading'
+import Reveal from './Reveal'
 import { education, publication, activities } from '../data/resume'
 
 export default function Education() {
@@ -9,8 +10,12 @@ export default function Education() {
 
       <div className="grid lg:grid-cols-2 gap-10">
         <div className="space-y-6">
-          {education.map((e) => (
-            <div key={e.school} className="rounded-lg border border-border bg-surface p-6">
+          {education.map((e, i) => (
+            <Reveal
+              key={e.school}
+              delay={i * 90}
+              className="lift-on-hover rounded-lg border border-border bg-surface p-6"
+            >
               <div className="flex items-start gap-3">
                 <GraduationCap className="mt-1 shrink-0 text-accent" size={20} />
                 <div className="flex-1">
@@ -31,16 +36,16 @@ export default function Education() {
                   )}
                 </div>
               </div>
-            </div>
+            </Reveal>
           ))}
 
-          <a
-            href={publication.url}
-            target="_blank"
-            rel="noreferrer"
-            className="block rounded-lg border border-border bg-surface p-6 hover:border-accent/60 transition-colors"
-          >
-            <div className="flex items-start gap-3">
+          <Reveal delay={education.length * 90}>
+            <a
+              href={publication.url}
+              target="_blank"
+              rel="noreferrer"
+              className="lift-on-hover flex items-start gap-3 rounded-lg border border-border bg-surface p-6 hover:border-accent/60 transition-colors"
+            >
               <FileText className="mt-1 shrink-0 text-accent" size={20} />
               <div>
                 <h3 className="font-display font-semibold text-ink">{publication.title}</h3>
@@ -50,21 +55,25 @@ export default function Education() {
                 <p className="mt-3 text-sm text-muted leading-relaxed">{publication.abstract}</p>
                 <span className="mt-3 inline-block text-sm text-accent hover:underline">Read the paper →</span>
               </div>
-            </div>
-          </a>
+            </a>
+          </Reveal>
         </div>
 
         <div>
           <h3 className="font-mono text-sm text-accent mb-4">Also involved in</h3>
           <div className="space-y-4">
-            {activities.map((a) => (
-              <div key={a.name} className="rounded-lg border border-border bg-surface p-5">
+            {activities.map((a, i) => (
+              <Reveal
+                key={a.name}
+                delay={i * 90}
+                className="lift-on-hover rounded-lg border border-border bg-surface p-5"
+              >
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <h4 className="font-medium text-ink">{a.name}</h4>
                   <span className="font-mono text-xs text-muted">{a.period}</span>
                 </div>
                 <p className="mt-2 text-sm text-muted leading-relaxed">{a.detail}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
