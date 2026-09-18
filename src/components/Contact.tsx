@@ -31,7 +31,16 @@ export default function Contact() {
       <footer className="relative border-t border-border">
         <div className="mx-auto max-w-6xl px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-2 font-mono text-xs text-muted">
           <p>© {new Date().getFullYear()} Aarav Das. Built with React, TypeScript & Tailwind.</p>
-          <p>{profile.location}</p>
+          <p className="flex items-center gap-3">
+            <span>{profile.location}</span>
+            <span className="text-border">·</span>
+            <span>
+              For AI agents:{' '}
+              <a href="/llms.txt" className="text-accent hover:underline">
+                llms.txt
+              </a>
+            </span>
+          </p>
         </div>
       </footer>
     </section>

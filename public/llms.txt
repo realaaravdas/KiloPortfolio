@@ -1,0 +1,18 @@
+# Aarav Das
+
+> I build software and robots — from computer vision pipelines that let a robot see, to full-stack tools that ship to real users. Freshman at UC Santa Cruz studying Robotics Engineering, with four years leading the code and computer vision team on an FRC robotics team and a summer building enterprise observability tooling at an AI startup.
+
+The site is a single page. Everything on it is in the full-text file below.
+
+## Site
+
+- [Full text of the site, Markdown](https://aaravdas.dev/llms-full.txt): experience, projects, skills, education, publication, contact. Start here.
+- [Agent page, HTML](https://aaravdas.dev/ai/): the same text as a plain web page without scripts or navigation.
+- [Home page, HTML](https://aaravdas.dev/): the human version.
+
+## Primary sources
+
+- [GitHub, realaaravdas](https://github.com/realaaravdas): personal and robotics projects.
+- [Published paper, PDF](https://www.curieuxacademicjournal.com/_files/ugd/99711c_95397c2ad29e43af88a4539dd7344073.pdf): "The Ethics and Legal Treatment Which Should Govern Artificial Intelligence," Curieux Academic Journal, October 2024, p. 55.
+
+Contact: realaaravdas@gmail.com. Last updated 2026-09-18.

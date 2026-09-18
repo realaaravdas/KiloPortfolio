@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "npm run generate:llms",
     "build": "tsc -b && vite build",
+    "generate:llms": "tsx scripts/generate-llms-txt.ts",
     "lint": "oxlint",
     "preview": "vite preview"
   },
@@ -22,6 +24,7 @@
     "@vitejs/plugin-react": "^6.1.1",
     "oxlint": "^1.81.0",
     "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.13",
     "typescript": "~6.0.2",
     "vite": "^8.3.0"
   }
