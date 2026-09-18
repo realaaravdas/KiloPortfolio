@@ -50,7 +50,7 @@ export default function Education() {
               <div>
                 <h3 className="font-display font-semibold text-ink">{publication.title}</h3>
                 <p className="mt-1 font-mono text-xs text-muted">
-                  {publication.publisher} · {publication.date}
+                  {publication.publisher} · {publication.date} · {publication.page}
                 </p>
                 <p className="mt-3 text-sm text-muted leading-relaxed">{publication.abstract}</p>
                 <span className="mt-3 inline-block text-sm text-accent hover:underline">Read the paper →</span>

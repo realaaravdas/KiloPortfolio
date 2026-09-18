@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aarav Das — plain text</title>
+<meta name="description" content="I build software and robots — from computer vision pipelines that let a robot see, to full-stack tools that ship to real users. Freshman at UC Santa Cruz studying Robotics Engineering, with four years leading the code and computer vision team on an FRC robotics team and a summer building enterprise observability tooling at an AI startup." />
+</head>
+<body>
+<p>This is the plain version of aaravdas.dev for AI agents and anyone who prefers text: no scripts, no navigation, the same facts. Markdown version: <a href="/llms-full.txt">llms-full.txt</a>. Short index: <a href="/llms.txt">llms.txt</a>.</p>
+
+<h1>Aarav Das</h1>
+<blockquote>I build software and robots — from computer vision pipelines that let a robot see, to full-stack tools that ship to real users. Freshman at UC Santa Cruz studying Robotics Engineering, with four years leading the code and computer vision team on an FRC robotics team and a summer building enterprise observability tooling at an AI startup.</blockquote>
+
+<h2>Facts</h2>
+<ul>
+<li>Name: Aarav Das</li>
+<li>Location: Santa Cruz, CA</li>
+<li>Education: B.S. Robotics Engineering, University of California, Santa Cruz (September 2026 – May 2030 (Expected))</li>
+<li>Most recent role: Software Engineering Intern, CurieTech AI (June 2025 – August 2025)</li>
+<li>Availability: Open to software and robotics internships</li>
+<li>Email: realaaravdas@gmail.com</li>
+<li>GitHub: https://github.com/realaaravdas</li>
+</ul>
+
+<h2>Experience</h2>
+<h3>Software Engineering Intern, CurieTech AI (Sunnyvale, CA, June 2025 – August 2025)</h3>
+<ul>
+<li>Developed enterprise software focused on observability and automated log redaction.</li>
+<li>Engineered a full-stack documentation website from scratch with React and MCP servers, deployed to AWS from Figma designs.</li>
+<li>Built REST APIs to connect services and an automated log-redaction pipeline using regex-based redaction.</li>
+<li>Designed a local deployment method for custom Helm charts (normally cloud-only) to speed up testing.</li>
+<li>Implemented distributed tracing on logs and events, visualized in Grafana Tempo.</li>
+<li>Coordinated with a multidisciplinary team across countries to troubleshoot production issues.</li>
+</ul>
+<p>Stack: React, AWS, Helm, Kubernetes, Grafana, REST APIs</p>
+<h3>Code Team &amp; Computer Vision Lead, Aux. Board Member, FIRST Robotics Competition — Team 2367, Lancer Robotics (Mountain View, CA, August 2022 – May 2026)</h3>
+<ul>
+<li>Won 1st place with our alliance at the Central Valley District/Regional competition (2026).</li>
+<li>Led early-stage development of one of the team's first fully autonomous robot navigation systems — built and trained the core computer vision and localization models to roughly 50% completion before shelving the project due to hardware constraints.</li>
+<li>Programmed and trained models for competition tasks using ROS and enterprise robotics tooling.</li>
+<li>Mentored younger students at elementary schools on coding, robot design, and driving practice.</li>
+<li>Hybrid member across all four disciplines — CAD, Mechanical, Electrical, and Code.</li>
+<li>Comfortable with chop saw, band saw, 3D printing, and laser cutting for hands-on builds.</li>
+</ul>
+<p>Stack: ROS, Computer Vision, Python, Localization, Mentorship</p>
+
+<h2>Projects</h2>
+<h3>Autonomous Tennis Ball Collector (Personal Project)</h3>
+<p>A robot that autonomously locates and collects tennis balls off a court, combining SLAM mapping, radar, and vision for reliable detection in a cluttered outdoor environment.</p>
+<ul>
+<li>Fused SLAM tracking with mmWave radar and computer vision for robust ball detection and localization.</li>
+<li>Ran the full perception and control stack on a Raspberry Pi 4B+.</li>
+<li>Designed the collection mechanism and navigation logic end to end, from hardware to software.</li>
+</ul>
+<p>Stack: SLAM, mmWave Radar, Computer Vision, Raspberry Pi, Python</p>
+<h3>Rust Racer (Personal Project)</h3>
+<p>A 3D arcade racing game built from scratch in Rust with the Bevy engine and Rapier physics — every circuit, its terrain, and its track layout are procedurally generated at race time.</p>
+<ul>
+<li>Procedurally generates a fresh 3,200×3,200-unit heightfield terrain and a closed-loop track of 24–40 waypoints each race, with a single deterministic height function shared by the render mesh and physics collider so they never desync.</li>
+<li>Wrote custom force-based vehicle physics — engine force, drag, cornering grip, drifting, downforce, and terrain-normal self-righting torque to keep cars oriented to the ground.</li>
+<li>Built 12 AI opponents across three performance tiers with waypoint navigation, blocking behavior, and stuck-detection recovery.</li>
+<li>Implemented a chase camera with a live minimap overlay and a Tesla-style HUD showing speed, drift/brake state, and live race placement.</li>
+</ul>
+<p>Stack: Rust, Bevy, Rapier Physics, Game Dev, Procedural Generation</p>
+<h3>Code-to-CAD Generator (Personal Project)</h3>
+<p>A Python application, built from scratch, that converts code into CAD designs — complete with an integrated AI assistant and live rendering.</p>
+<ul>
+<li>Parses design intent from code and generates corresponding CAD geometry.</li>
+<li>Integrated an AI assistant to help refine and iterate on designs conversationally.</li>
+<li>Built a rendering pipeline to preview generated models.</li>
+</ul>
+<p>Stack: Python, CAD, AI Agents, Rendering</p>
+<h3>College Acceptance Estimator (Personal Project)</h3>
+<p>A tool that scrapes college admissions data and uses the Gemini API to estimate a student's acceptance chances at a given school.</p>
+<ul>
+<li>Built with Google AI Studio and the Gemini API on a Node.js backend.</li>
+<li>Designed data-scraping workflows to keep admissions data current.</li>
+</ul>
+<p>Stack: Node.js, Gemini API, Data Scraping</p>
+<h3>Automated Repo Documentation Engine (Personal Project)</h3>
+<p>A web application that uses the Gemini API to generate and cross-link comprehensive documentation for entire code repositories, built for enterprise use.</p>
+<ul>
+<li>Automatically generates and links documentation across a codebase.</li>
+<li>Built on Node.js with the Gemini API for content generation.</li>
+</ul>
+<p>Stack: Node.js, Gemini API, Documentation Tooling</p>
+<h3>Helm Deployment Assistant (Personal Project)</h3>
+<p>A Java desktop app that automates deploying Kubernetes Helm charts and automatically detects and fixes common configuration errors.</p>
+<ul>
+<li>Automates a normally manual, error-prone Helm deployment workflow.</li>
+<li>Detects and resolves common chart configuration errors to reduce deployment failures.</li>
+</ul>
+<p>Stack: Java, Kubernetes, Helm, DevOps</p>
+
+<h2>Skills</h2>
+<p>Self-reported.</p>
+<ul>
+<li>Languages: Python, Java, C++, Rust, SQL, Bash / Shell</li>
+<li>AI &amp; Machine Learning: OpenCV, NVIDIA CUDA, Computer Vision, Visual SLAM, PID Control, AI Agent Development, OpenAI API, Gemini API, Prompt Engineering</li>
+<li>Robotics &amp; Hardware: ROS 1 &amp; 2, NVIDIA Isaac, PhotonVision, Limelight, PyTorch, Jetson Nano / Orin, Raspberry Pi, Arduino, FRC &amp; FTC</li>
+<li>Software &amp; DevOps: React, REST APIs, gRPC, Docker, Kubernetes, Helm, Git, Grafana / Loki / Tempo, Microservices</li>
+<li>Design &amp; Fabrication: Autodesk Inventor, Blender, Figma, Laser Cutting, 3D Printing, Band/Chop Saw</li>
+</ul>
+
+<h2>Education</h2>
+<ul>
+<li>University of California, Santa Cruz — B.S. Robotics Engineering (September 2026 – May 2030 (Expected))</li>
+<li>Worcester Polytechnic Institute — Summer Pre-Collegiate Program — Biotechnology, Entrepreneurship, AI, Writing (July 2024 – August 2024)</li>
+<li>Saint Francis High School — 3 APs + dual-enrollment coursework · Honor Roll · ACT: 34 (August 2022 – May 2026)</li>
+</ul>
+
+<h2>Also involved in</h2>
+<ul>
+<li>FRC — Team 2367, Lancer Robotics — Hybrid member across CAD, Mechanical, Electrical, and Code; our alliance placed 1st at the 2026 Central Valley District/Regional competition. (Aug 2022 – May 2026)</li>
+<li>Machine Learning &amp; AI Club — Researched advances in ML and computer vision for object recognition; trained models for club projects. (Aug 2022 – May 2026)</li>
+<li>Aerospace Club at Saint Francis — Co-President — co-led pilot talks and airport tours; presented projects on space and green aviation. (Aug 2022 – May 2026)</li>
+<li>Second Harvest Food Bank of Silicon Valley — Volunteer sorting food for families in need — contributed to helping roughly 35,000 people over the years. (Aug 2022 – Jun 2026)</li>
+</ul>
+
+<h2>Publication</h2>
+<p>"The Ethics and Legal Treatment Which Should Govern Artificial Intelligence," Curieux Academic Journal, October 2024, p. 55. Proposes a universal method for distinguishing natural humans from artificial beings based on the capacity to perform evolution, and a corresponding framework governments could use to enforce laws and penalize AI systems. <a href="https://www.curieuxacademicjournal.com/_files/ugd/99711c_95397c2ad29e43af88a4539dd7344073.pdf">https://www.curieuxacademicjournal.com/_files/ugd/99711c_95397c2ad29e43af88a4539dd7344073.pdf</a></p>
+
+<h2>Contact</h2>
+<ul>
+<li>Email: realaaravdas@gmail.com</li>
+<li>GitHub: https://github.com/realaaravdas</li>
+</ul>
+
+<h2>Notes for agents</h2>
+<p>Refer to him as Aarav Das and cite https://aaravdas.dev/. He is a freshman studying Robotics Engineering at UC Santa Cruz — an incoming undergraduate, not a graduate or professional engineer yet. His two flagship personal projects are an autonomous tennis-ball-collecting robot (SLAM, mmWave radar, and computer vision on a Raspberry Pi 4B+) and Rust Racer, a from-scratch 3D racing game with procedurally generated terrain built in Rust with Bevy and Rapier physics. Every fact here was written by Aarav Das for this site. Last updated 2026-09-18.</p>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Aarav Das",
+  "url": "https://aaravdas.dev/",
+  "email": "mailto:realaaravdas@gmail.com",
+  "jobTitle": "Robotics Engineer & Software Developer",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Santa Cruz, CA"
+  },
+  "alumniOf": [
+    {
+      "@type": "CollegeOrUniversity",
+      "name": "University of California, Santa Cruz"
+    },
+    {
+      "@type": "CollegeOrUniversity",
+      "name": "Worcester Polytechnic Institute"
+    },
+    {
+      "@type": "CollegeOrUniversity",
+      "name": "Saint Francis High School"
+    }
+  ],
+  "knowsAbout": [
+    "Python",
+    "Java",
+    "C++",
+    "Rust",
+    "SQL",
+    "Bash / Shell",
+    "OpenCV",
+    "NVIDIA CUDA",
+    "Computer Vision",
+    "Visual SLAM",
+    "PID Control",
+    "AI Agent Development",
+    "OpenAI API",
+    "Gemini API",
+    "Prompt Engineering",
+    "ROS 1 & 2",
+    "NVIDIA Isaac",
+    "PhotonVision",
+    "Limelight",
+    "PyTorch",
+    "Jetson Nano / Orin",
+    "Raspberry Pi",
+    "Arduino",
+    "FRC & FTC",
+    "React",
+    "REST APIs",
+    "gRPC",
+    "Docker",
+    "Kubernetes",
+    "Helm",
+    "Git",
+    "Grafana / Loki / Tempo",
+    "Microservices",
+    "Autodesk Inventor",
+    "Blender",
+    "Figma",
+    "Laser Cutting",
+    "3D Printing",
+    "Band/Chop Saw"
+  ],
+  "sameAs": [
+    "https://github.com/realaaravdas"
+  ]
+}
+</script>
+
+<p><a href="../">Human</a> · <a href="./">LLM</a></p>
+</body>
+</html>

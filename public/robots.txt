@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Machine-readable versions of this site, for AI agents and crawlers:
+#   https://aaravdas.dev/llms.txt        short index
+#   https://aaravdas.dev/llms-full.txt   full text as Markdown
+#   https://aaravdas.dev/ai/             full text as plain HTML
