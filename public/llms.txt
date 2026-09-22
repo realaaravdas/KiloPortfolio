@@ -13,6 +13,7 @@ The site is a single page. Everything on it is in the full-text file below.
 ## Primary sources
 
 - [GitHub, realaaravdas](https://github.com/realaaravdas): personal and robotics projects.
+- [LinkedIn](https://www.linkedin.com/in/aarav-das-412160308/): roles, education, and endorsements.
 - [Published paper, PDF](https://www.curieuxacademicjournal.com/_files/ugd/99711c_95397c2ad29e43af88a4539dd7344073.pdf): "The Ethics and Legal Treatment Which Should Govern Artificial Intelligence," Curieux Academic Journal, October 2024, p. 55.
 
-Contact: realaaravdas@gmail.com. Last updated 2026-09-18.
+Contact: realaaravdas@gmail.com. Last updated 2026-09-22.

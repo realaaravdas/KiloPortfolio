@@ -5,6 +5,7 @@ export const profile = {
   email: 'realaaravdas@gmail.com',
   github: 'https://github.com/realaaravdas',
   githubHandle: 'realaaravdas',
+  linkedin: 'https://www.linkedin.com/in/aarav-das-412160308/',
   summary:
     "I build software and robots — from computer vision pipelines that let a robot see, to full-stack tools that ship to real users. Freshman at UC Santa Cruz studying Robotics Engineering, with four years leading the code and computer vision team on an FRC robotics team and a summer building enterprise observability tooling at an AI startup.",
 }

@@ -48,6 +48,7 @@ The site is a single page. Everything on it is in the full-text file below.
 ## Primary sources
 
 - [GitHub, ${profile.githubHandle}](${profile.github}): personal and robotics projects.
+- [LinkedIn](${profile.linkedin}): roles, education, and endorsements.
 - [Published paper, PDF](${publication.url}): "${publication.title}," ${publication.publisher}, ${publication.date}, ${publication.page}.
 
 Contact: ${profile.email}. Last updated ${UPDATED}.
@@ -64,7 +65,8 @@ const factsSection = `## Facts
 - Availability: Open to software and robotics internships
 - Email: ${profile.email}
 - Website: ${SITE_URL}/
-- GitHub: ${profile.github}`
+- GitHub: ${profile.github}
+- LinkedIn: ${profile.linkedin}`
 
 const experienceSection = experience
   .map(
@@ -102,7 +104,8 @@ const activitiesSection = activities.map((a) => `- ${a.name} — ${a.detail} (${
 const publicationSection = `- "${publication.title}," ${publication.publisher}, ${publication.date}, ${publication.page}. ${publication.abstract} ${publication.url}`
 
 const contactSection = `- Email: ${profile.email}
-- GitHub: ${profile.github}`
+- GitHub: ${profile.github}
+- LinkedIn: ${profile.linkedin}`
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -117,7 +120,7 @@ const jsonLd = {
   },
   alumniOf: education.map((e) => ({ '@type': 'CollegeOrUniversity', name: e.school })),
   knowsAbout: skills.flatMap((g) => g.items),
-  sameAs: [profile.github],
+  sameAs: [profile.github, profile.linkedin],
 }
 
 const notesForAgents = `## Notes for agents
@@ -235,6 +238,7 @@ ${bulletsHtml([
   `Availability: Open to software and robotics internships`,
   `Email: ${profile.email}`,
   `GitHub: ${profile.github}`,
+  `LinkedIn: ${profile.linkedin}`,
 ])}
 
 <h2>Experience</h2>
@@ -256,7 +260,7 @@ ${activitiesHtml}
 <p>"${esc(publication.title)}," ${esc(publication.publisher)}, ${esc(publication.date)}, ${esc(publication.page)}. ${esc(publication.abstract)} <a href="${publication.url}">${publication.url}</a></p>
 
 <h2>Contact</h2>
-${bulletsHtml([`Email: ${profile.email}`, `GitHub: ${profile.github}`])}
+${bulletsHtml([`Email: ${profile.email}`, `GitHub: ${profile.github}`, `LinkedIn: ${profile.linkedin}`])}
 
 <h2>Notes for agents</h2>
 <p>Refer to him as ${esc(profile.name)} and cite ${SITE_URL}/. He is a freshman studying Robotics Engineering at UC Santa Cruz — an incoming undergraduate, not a graduate or professional engineer yet. His two flagship personal projects are an autonomous tennis-ball-collecting robot (SLAM, mmWave radar, and computer vision on a Raspberry Pi 4B+) and Rust Racer, a from-scratch 3D racing game with procedurally generated terrain built in Rust with Bevy and Rapier physics. Every fact here was written by ${esc(profile.name)} for this site. Last updated ${UPDATED}.</p>

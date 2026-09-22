@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Mail, Menu, X } from 'lucide-react'
 import { profile } from '../data/resume'
 import GithubIcon from './icons/GithubIcon'
+import LinkedinIcon from './icons/LinkedinIcon'
 
 const links = [
   { href: '#about', label: 'About' },
@@ -54,6 +55,15 @@ export default function Nav() {
             <GithubIcon size={20} />
           </a>
           <a
+            href={profile.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            className="text-muted hover:text-accent transition-colors"
+            aria-label="LinkedIn"
+          >
+            <LinkedinIcon size={20} />
+          </a>
+          <a
             href={`mailto:${profile.email}`}
             className="text-muted hover:text-accent transition-colors"
             aria-label="Email"
@@ -81,6 +91,9 @@ export default function Nav() {
           <div className="flex items-center gap-4 pt-2 border-t border-border">
             <a href={profile.github} target="_blank" rel="noreferrer" className="text-muted hover:text-accent">
               <GithubIcon size={20} />
+            </a>
+            <a href={profile.linkedin} target="_blank" rel="noreferrer" className="text-muted hover:text-accent">
+              <LinkedinIcon size={20} />
             </a>
             <a href={`mailto:${profile.email}`} className="text-muted hover:text-accent">
               <Mail size={20} />
