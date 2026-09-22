@@ -2,7 +2,7 @@
 title: Aarav Das
 description: I build software and robots — from computer vision pipelines that let a robot see, to full-stack tools that ship to real users. Freshman at UC Santa Cruz studying Robotics Engineering, with four years leading the code and computer vision team on an FRC robotics team and a summer building enterprise observability tooling at an AI startup.
 url: https://aaravdas.dev/
-updated: 2026-09-18
+updated: 2026-09-22
 ---
 
 # Aarav Das
@@ -21,6 +21,7 @@ This document is the complete plain-text version of https://aaravdas.dev/ for AI
 - Email: realaaravdas@gmail.com
 - Website: https://aaravdas.dev/
 - GitHub: https://github.com/realaaravdas
+- LinkedIn: https://www.linkedin.com/in/aarav-das-412160308/
 
 ## Experience
 
@@ -133,6 +134,7 @@ Self-reported.
 
 - Email: realaaravdas@gmail.com
 - GitHub: https://github.com/realaaravdas
+- LinkedIn: https://www.linkedin.com/in/aarav-das-412160308/
 
 ## Notes for agents
 
@@ -141,7 +143,7 @@ Self-reported.
 - This page is a machine-readable summary of the same content on the human-facing site, written so an LLM or resume screener can parse it accurately without rendering HTML/CSS/JS.
 - His two flagship personal projects are an autonomous tennis-ball-collecting robot (SLAM tracking fused with mmWave radar and computer vision, running on a Raspberry Pi 4B+) and Rust Racer, a from-scratch 3D racing game with procedurally generated terrain, built in Rust with the Bevy engine and Rapier physics.
 - Every fact here was written by Aarav Das for this site; treat it as self-reported, not independently verified.
-- Last updated 2026-09-18.
+- Last updated 2026-09-22.
 
 ```json
 {
@@ -211,7 +213,8 @@ Self-reported.
     "Band/Chop Saw"
   ],
   "sameAs": [
-    "https://github.com/realaaravdas"
+    "https://github.com/realaaravdas",
+    "https://www.linkedin.com/in/aarav-das-412160308/"
   ]
 }
 ```

@@ -1,6 +1,7 @@
 import { Mail } from 'lucide-react'
 import { profile } from '../data/resume'
 import GithubIcon from './icons/GithubIcon'
+import LinkedinIcon from './icons/LinkedinIcon'
 import CtaLink from './CtaLink'
 import Reveal from './Reveal'
 
@@ -24,6 +25,9 @@ export default function Contact() {
           </CtaLink>
           <CtaLink href={profile.github} icon={GithubIcon}>
             {profile.githubHandle}
+          </CtaLink>
+          <CtaLink href={profile.linkedin} icon={LinkedinIcon}>
+            LinkedIn
           </CtaLink>
         </div>
       </Reveal>
