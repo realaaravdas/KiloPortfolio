@@ -2,7 +2,7 @@
 title: Aarav Das
 description: I build software and robots — from computer vision pipelines that let a robot see, to full-stack tools that ship to real users. Freshman at UC Santa Cruz studying Robotics Engineering, with four years leading the code and computer vision team on an FRC robotics team and a summer building enterprise observability tooling at an AI startup.
 url: https://aaravdas.dev/
-updated: 2026-09-22
+updated: 2026-09-29
 ---
 
 # Aarav Das
@@ -47,15 +47,6 @@ Stack: ROS, Computer Vision, Python, Localization, Mentorship
 
 ## Projects
 
-### Autonomous Tennis Ball Collector (Personal Project)
-
-A robot that autonomously locates and collects tennis balls off a court, combining SLAM mapping, radar, and vision for reliable detection in a cluttered outdoor environment.
-
-- Fused SLAM tracking with mmWave radar and computer vision for robust ball detection and localization.
-- Ran the full perception and control stack on a Raspberry Pi 4B+.
-- Designed the collection mechanism and navigation logic end to end, from hardware to software.
-Stack: SLAM, mmWave Radar, Computer Vision, Raspberry Pi, Python
-
 ### Rust Racer (Personal Project)
 
 A 3D arcade racing game built from scratch in Rust with the Bevy engine and Rapier physics — every circuit, its terrain, and its track layout are procedurally generated at race time.
@@ -66,14 +57,24 @@ A 3D arcade racing game built from scratch in Rust with the Bevy engine and Rapi
 - Implemented a chase camera with a live minimap overlay and a Tesla-style HUD showing speed, drift/brake state, and live race placement.
 Stack: Rust, Bevy, Rapier Physics, Game Dev, Procedural Generation
 
+### XNav (Personal Project)
+
+A from-scratch, open-source AprilTag vision coprocessor for FRC robots — a DIY replacement for the commercial Limelight 3, built to run on the same Raspberry Pi Compute Module 4 hardware.
+
+- Built a full vision pipeline in Python — V4L2 camera capture, AprilTag detection with PnP 3D pose estimation, and field-relative localization from a WPILib .fmap field map.
+- Published results over WPILib-compatible NetworkTables 4, plus a C++ client library (XNavLib) that drops directly into FRC robot code.
+- Built a Flask + SocketIO web dashboard for live camera/tag monitoring, checkerboard camera calibration, and full system configuration.
+- Packaged the whole stack as a flashable, offline-first Raspberry Pi image that boots headless with no first-run setup.
+Stack: Python, C++, Computer Vision, AprilTag, NetworkTables, WPILib, Raspberry Pi
+
 ### Code-to-CAD Generator (Personal Project)
 
-A Python application, built from scratch, that converts code into CAD designs — complete with an integrated AI assistant and live rendering.
+A Python application, built from scratch, that compiles a custom design language into CAD geometry with a live rendering pipeline to preview the results.
 
-- Parses design intent from code and generates corresponding CAD geometry.
-- Integrated an AI assistant to help refine and iterate on designs conversationally.
-- Built a rendering pipeline to preview generated models.
-Stack: Python, CAD, AI Agents, Rendering
+- Designed a small custom language for describing CAD geometry in code.
+- Built a parser and rendering pipeline that compiles that language into previewable 3D models.
+- Prototyping an AI assistant to help generate and refine designs conversationally.
+Stack: Python, CAD, Rendering, Language Design
 
 ### College Acceptance Estimator (Personal Project)
 
@@ -98,6 +99,15 @@ A Java desktop app that automates deploying Kubernetes Helm charts and automatic
 - Automates a normally manual, error-prone Helm deployment workflow.
 - Detects and resolves common chart configuration errors to reduce deployment failures.
 Stack: Java, Kubernetes, Helm, DevOps
+
+### Autonomous Tennis Ball Collector (Personal Project)
+
+A robot that autonomously locates and collects tennis balls off a court, combining SLAM mapping, radar, and vision for reliable detection in a cluttered outdoor environment.
+
+- Fused SLAM tracking with mmWave radar and computer vision for robust ball detection and localization.
+- Ran the full perception and control stack on a Raspberry Pi 4B+.
+- Designed the collection mechanism and navigation logic end to end, from hardware to software.
+Stack: SLAM, mmWave Radar, Computer Vision, Raspberry Pi, Python
 
 ## Skills
 
@@ -143,7 +153,7 @@ Self-reported.
 - This page is a machine-readable summary of the same content on the human-facing site, written so an LLM or resume screener can parse it accurately without rendering HTML/CSS/JS.
 - His two flagship personal projects are an autonomous tennis-ball-collecting robot (SLAM tracking fused with mmWave radar and computer vision, running on a Raspberry Pi 4B+) and Rust Racer, a from-scratch 3D racing game with procedurally generated terrain, built in Rust with the Bevy engine and Rapier physics.
 - Every fact here was written by Aarav Das for this site; treat it as self-reported, not independently verified.
-- Last updated 2026-09-22.
+- Last updated 2026-09-29.
 
 ```json
 {
