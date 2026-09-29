@@ -6,16 +6,54 @@ export const profile = {
   github: 'https://github.com/realaaravdas',
   githubHandle: 'realaaravdas',
   linkedin: 'https://www.linkedin.com/in/aarav-das-412160308/',
+  title: 'Robotics Engineer',
+  focus: 'AI · Autonomy · Computer Vision',
+  resumeUrl: '/Aarav_Das_Resume.docx',
   summary:
-    "I build software and robots — from computer vision pipelines that let a robot see, to full-stack tools that ship to real users. Freshman at UC Santa Cruz studying Robotics Engineering, with four years leading the code and computer vision team on an FRC robotics team and a summer building enterprise observability tooling at an AI startup.",
+    "Robotics Engineering student at UC Santa Cruz building autonomous systems end to end — from computer vision, SLAM, and control on embedded hardware to cloud-deployed services. Shipped production software as an engineering intern and led computer vision for a regional-winning FRC team. Seeking internships in software, robotics autonomy, computer vision, controls, and AI automation.",
 }
 
 export const stats = [
-  { label: 'Years on FRC Code Team', value: '4+' },
-  { label: 'Personal Projects Shipped', value: '5' },
+  { label: 'Years on FRC Code Team', value: '4' },
+  { label: 'Regional Result', value: '1st' },
   { label: 'Internship', value: 'CurieTech AI' },
   { label: 'Published Paper', value: '1' },
 ]
+
+/** Four stat cards per scroll section (label + value). */
+export type Stat = { label: string; value: string }
+export const sectionStats: Record<'about' | 'skills' | 'experience' | 'projects' | 'contact', Stat[]> = {
+  about: [
+    { label: 'Seasons · FRC 2367', value: '4' },
+    { label: '2026 Central Valley', value: '1st Place' },
+    { label: 'ACT Composite', value: '34' },
+    { label: 'Published Papers', value: '1' },
+  ],
+  skills: [
+    { label: 'Languages', value: '7' },
+    { label: 'Compute Targets', value: 'Jetson · Coral · Pi' },
+    { label: 'Robotics Middleware', value: 'ROS 1 / 2' },
+    { label: 'Perception Stack', value: 'OpenCV · PyTorch' },
+  ],
+  experience: [
+    { label: 'Robotics Seasons', value: '4' },
+    { label: 'Build Disciplines', value: 'CAD · Mech · Elec · Code' },
+    { label: 'Industry Internship', value: 'Summer 2025' },
+    { label: 'Deployment Target', value: 'AWS · K8s' },
+  ],
+  projects: [
+    { label: 'Featured Builds', value: '4' },
+    { label: 'AI Opponents · Rust Racer', value: '12' },
+    { label: 'Procedural Terrain', value: '3,200²' },
+    { label: 'Fused Sensors · Ball Collector', value: '3' },
+  ],
+  contact: [
+    { label: 'Status', value: 'Open to Internships' },
+    { label: 'Typical Response', value: '< 24 h' },
+    { label: 'Base', value: 'Santa Cruz, CA' },
+    { label: 'Focus', value: 'Robotics · CV · AI' },
+  ],
+}
 
 export type Experience = {
   role: string
@@ -31,31 +69,29 @@ export const experience: Experience[] = [
     role: 'Software Engineering Intern',
     org: 'CurieTech AI',
     location: 'Sunnyvale, CA',
-    period: 'June 2025 – August 2025',
+    period: 'Jun 2025 – Aug 2025',
     bullets: [
-      'Developed enterprise software focused on observability and automated log redaction.',
-      'Engineered a full-stack documentation website from scratch with React and MCP servers, deployed to AWS from Figma designs.',
-      'Built REST APIs to connect services and an automated log-redaction pipeline using regex-based redaction.',
-      'Designed a local deployment method for custom Helm charts (normally cloud-only) to speed up testing.',
-      'Implemented distributed tracing on logs and events, visualized in Grafana Tempo.',
-      'Coordinated with a multidisciplinary team across countries to troubleshoot production issues.',
+      'Built and deployed a full-stack product documentation site from Figma designs using React and MCP servers, hosted on AWS.',
+      "Developed REST APIs to handle communication between microservices on the company's enterprise platform.",
+      'Created an automated log-redaction service and pipeline using regex-based pattern matching to remove sensitive data from logs.',
+      'Implemented distributed tracing across logs and events, visualized in Grafana Tempo, to improve observability across services.',
+      'Designed a local deployment method for custom Helm charts, enabling Kubernetes testing without cloud infrastructure.',
+      'Used LLM frameworks to automatically generate, edit, and update product documentation; collaborated with an internationally distributed, multidisciplinary team to troubleshoot and resolve technical issues.',
     ],
-    tags: ['React', 'AWS', 'Helm', 'Kubernetes', 'Grafana', 'REST APIs'],
+    tags: ['React', 'MCP', 'AWS', 'Helm', 'Kubernetes', 'Grafana Tempo', 'REST APIs'],
   },
   {
-    role: 'Code Team & Computer Vision Lead, Aux. Board Member',
-    org: 'FIRST Robotics Competition — Team 2367, Lancer Robotics',
+    role: 'Computer Vision Lead, Code Team & Auxiliary Board Member',
+    org: 'FRC Team 2367, Lancer Robotics',
     location: 'Mountain View, CA',
-    period: 'August 2022 – May 2026',
+    period: 'Aug 2022 – May 2026',
     bullets: [
-      'Won 1st place with our alliance at the Central Valley District/Regional competition (2026).',
-      "Led early-stage development of one of the team's first fully autonomous robot navigation systems — built and trained the core computer vision and localization models to roughly 50% completion before shelving the project due to hardware constraints.",
-      'Programmed and trained models for competition tasks using ROS and enterprise robotics tooling.',
-      'Mentored younger students at elementary schools on coding, robot design, and driving practice.',
-      'Hybrid member across all four disciplines — CAD, Mechanical, Electrical, and Code.',
-      'Comfortable with chop saw, band saw, 3D printing, and laser cutting for hands-on builds.',
+      'Won 1st place at the 2026 Central Valley Regional as part of the winning alliance.',
+      "Designed and coded a prototype autonomous navigation system for the team: a multi-node ROS 2 navigation and pilot stack distributed across onboard co-processors (NVIDIA Jetson, Google Coral) and computers.",
+      "Built AprilTag-based pose estimation and trained the prototype's computer vision models; when build time ran short, moved to developing the competition robot's Limelight vision system.",
+      'Mentored younger students in coding, robot design, and driving; worked across CAD, mechanical, electrical, and code.',
     ],
-    tags: ['ROS', 'Computer Vision', 'Python', 'Localization', 'Mentorship'],
+    tags: ['ROS 2', 'AprilTag', 'Jetson', 'Coral', 'Limelight', 'Computer Vision', 'Mentorship'],
   },
 ]
 
@@ -71,76 +107,56 @@ export type Project = {
 export const projects: Project[] = [
   {
     title: 'Autonomous Tennis Ball Collector',
-    period: 'Personal Project',
+    period: '2025 – 2026',
     description:
-      'A robot that autonomously locates and collects tennis balls off a court, combining SLAM mapping, radar, and vision for reliable detection in a cluttered outdoor environment.',
+      'A mobile robot that autonomously finds and collects tennis balls on a court, fusing SLAM tracking, mmWave radar, and computer vision for robust detection and localization in a cluttered outdoor environment.',
     bullets: [
-      'Fused SLAM tracking with mmWave radar and computer vision for robust ball detection and localization.',
-      'Ran the full perception and control stack on a Raspberry Pi 4B+.',
+      'Fused visual SLAM tracking, mmWave radar, and computer vision for robust ball detection and localization.',
+      'Ran the full perception, navigation, and control stack on a Raspberry Pi 4B+.',
       'Designed the collection mechanism and navigation logic end to end, from hardware to software.',
     ],
-    tags: ['SLAM', 'mmWave Radar', 'Computer Vision', 'Raspberry Pi', 'Python'],
+    tags: ['Python', 'Raspberry Pi', 'Visual SLAM', 'mmWave Radar', 'Computer Vision'],
     featured: true,
   },
   {
     title: 'Rust Racer',
-    period: 'Personal Project',
+    period: '2025 – Present',
     description:
       'A 3D arcade racing game built from scratch in Rust with the Bevy engine and Rapier physics — every circuit, its terrain, and its track layout are procedurally generated at race time.',
     bullets: [
-      'Procedurally generates a fresh 3,200×3,200-unit heightfield terrain and a closed-loop track of 24–40 waypoints each race, with a single deterministic height function shared by the render mesh and physics collider so they never desync.',
-      'Wrote custom force-based vehicle physics — engine force, drag, cornering grip, drifting, downforce, and terrain-normal self-righting torque to keep cars oriented to the ground.',
-      'Built 12 AI opponents across three performance tiers with waypoint navigation, blocking behavior, and stuck-detection recovery.',
-      'Implemented a chase camera with a live minimap overlay and a Tesla-style HUD showing speed, drift/brake state, and live race placement.',
+      'Wrote custom force-based vehicle dynamics: engine force, drag, cornering grip, drifting, downforce, and terrain-normal self-righting torque.',
+      'Built 12 autonomous AI opponents across three tiers with waypoint navigation, blocking, and stuck-detection recovery.',
+      'Procedurally generates 3,200×3,200-unit terrain and 24–40-waypoint closed-loop tracks, with one deterministic height function shared by render mesh and physics collider so they never desync.',
+      'Implemented a chase camera with a live minimap overlay and a HUD showing speed, drift/brake state, and live race placement.',
     ],
-    tags: ['Rust', 'Bevy', 'Rapier Physics', 'Game Dev', 'Procedural Generation'],
+    tags: ['Rust', 'Bevy', 'Rapier Physics', 'Procedural Generation'],
     featured: true,
   },
   {
     title: 'Code-to-CAD Generator',
-    period: 'Personal Project',
+    period: '2025 – Present',
     description:
-      'A Python application, built from scratch, that converts code into CAD designs — complete with an integrated AI assistant and live rendering.',
+      'A Python application, built from scratch, that converts code into CAD geometry — with an AI assistant for conversational design iteration and live rendering.',
     bullets: [
       'Parses design intent from code and generates corresponding CAD geometry.',
-      'Integrated an AI assistant to help refine and iterate on designs conversationally.',
-      'Built a rendering pipeline to preview generated models.',
+      'Integrated an AI assistant to refine and iterate on designs conversationally.',
+      'Built a live rendering pipeline to preview generated models.',
     ],
-    tags: ['Python', 'CAD', 'AI Agents', 'Rendering'],
+    tags: ['Python', 'CAD', 'AI Agents', '3D Rendering'],
     featured: true,
   },
   {
-    title: 'College Acceptance Estimator',
-    period: 'Personal Project',
+    title: 'DevOps & AI Tools',
+    period: '2025',
     description:
-      'A tool that scrapes college admissions data and uses the Gemini API to estimate a student\'s acceptance chances at a given school.',
+      'A set of developer and automation tools built on Java, Kubernetes, and the Gemini API: Helm deployment automation, enterprise repo documentation, and an admissions-data estimator.',
     bullets: [
-      'Built with Google AI Studio and the Gemini API on a Node.js backend.',
-      'Designed data-scraping workflows to keep admissions data current.',
+      'Java desktop app that automates Kubernetes Helm chart deployment and detects and fixes common configuration errors.',
+      'Node.js + Gemini API enterprise repo-documentation generator that generates and cross-links docs across a codebase.',
+      'Node.js + Gemini API admissions-data scraper that estimates acceptance odds for a given school.',
     ],
-    tags: ['Node.js', 'Gemini API', 'Data Scraping'],
-  },
-  {
-    title: 'Automated Repo Documentation Engine',
-    period: 'Personal Project',
-    description:
-      'A web application that uses the Gemini API to generate and cross-link comprehensive documentation for entire code repositories, built for enterprise use.',
-    bullets: [
-      'Automatically generates and links documentation across a codebase.',
-      'Built on Node.js with the Gemini API for content generation.',
-    ],
-    tags: ['Node.js', 'Gemini API', 'Documentation Tooling'],
-  },
-  {
-    title: 'Helm Deployment Assistant',
-    period: 'Personal Project',
-    description:
-      'A Java desktop app that automates deploying Kubernetes Helm charts and automatically detects and fixes common configuration errors.',
-    bullets: [
-      'Automates a normally manual, error-prone Helm deployment workflow.',
-      'Detects and resolves common chart configuration errors to reduce deployment failures.',
-    ],
-    tags: ['Java', 'Kubernetes', 'Helm', 'DevOps'],
+    tags: ['Java', 'Kubernetes', 'Helm', 'Node.js', 'Gemini API'],
+    featured: true,
   },
 ]
 
@@ -156,88 +172,60 @@ export const education: EducationItem[] = [
   {
     school: 'University of California, Santa Cruz',
     location: 'Santa Cruz, CA',
-    period: 'September 2026 – May 2030 (Expected)',
+    period: 'Sep 2026 – Expected 2030',
     detail: 'B.S. Robotics Engineering',
-  },
-  {
-    school: 'Worcester Polytechnic Institute',
-    location: 'Boston, MA',
-    period: 'July 2024 – August 2024',
-    detail: 'Summer Pre-Collegiate Program — Biotechnology, Entrepreneurship, AI, Writing',
     bullets: [
-      'Built an electrocardiogram (EKG) circuit from op-amps, wires, and resistors.',
-      'Studied and fine-tuned AI models (Top-K, Top-P, prompting, hallucination levels) using Gemini and OpenAI APIs.',
-      'Drafted an academic paper on the ethics and legal treatment of AI.',
+      'Prior coursework: AP Calculus AB, AP Physics C: Mechanics, AP CS Principles, CS 1A: Java Programming (Foothill College).',
     ],
   },
   {
     school: 'Saint Francis High School',
     location: 'Mountain View, CA',
-    period: 'August 2022 – May 2026',
-    detail: '3 APs + dual-enrollment coursework · Honor Roll · ACT: 34',
+    period: 'May 2026',
+    detail: 'High School Diploma · Honor Roll · ACT 34',
+  },
+  {
+    school: 'Worcester Polytechnic Institute',
+    location: 'Worcester, MA',
+    period: 'Aug 2024',
+    detail: 'Summer Pre-Collegiate Program — AI, Biotechnology',
     bullets: [
-      'AP Calculus AB, AP Physics C: Mechanics, Computer Science 1A, AP Computer Science Principles.',
+      'Tuned LLM sampling (Top-K, Top-P) and prompting with Gemini and OpenAI APIs; built an EKG circuit from op-amps.',
     ],
   },
 ]
 
 export const skills: { category: string; items: string[] }[] = [
+  { category: 'Languages', items: ['Python', 'C++', 'Java', 'Rust', 'JavaScript (Node.js, React)', 'SQL', 'Bash'] },
   {
-    category: 'Languages',
-    items: ['Python', 'Java', 'C++', 'Rust', 'SQL', 'Bash / Shell'],
+    category: 'Robotics & Controls',
+    items: ['ROS 1/2 (multi-node)', 'AprilTag Pose Estimation', 'Visual SLAM', 'PID', 'Sensor Fusion', 'Kalman Filtering'],
   },
   {
-    category: 'AI & Machine Learning',
-    items: [
-      'OpenCV',
-      'NVIDIA CUDA',
-      'Computer Vision',
-      'Visual SLAM',
-      'PID Control',
-      'AI Agent Development',
-      'OpenAI API',
-      'Gemini API',
-      'Prompt Engineering',
-    ],
+    category: 'Hardware',
+    items: ['NVIDIA Jetson Nano/Orin', 'Google Coral', 'Raspberry Pi', 'Arduino', 'NVIDIA Isaac', 'PhotonVision', 'Limelight'],
   },
   {
-    category: 'Robotics & Hardware',
-    items: [
-      'ROS 1 & 2',
-      'NVIDIA Isaac',
-      'PhotonVision',
-      'Limelight',
-      'PyTorch',
-      'Jetson Nano / Orin',
-      'Raspberry Pi',
-      'Arduino',
-      'FRC & FTC',
-    ],
+    category: 'AI & Vision',
+    items: ['PyTorch', 'OpenCV', 'CUDA', 'Object Detection', 'AI Agents', 'Prompt Engineering', 'OpenAI / Gemini / Claude APIs'],
   },
   {
-    category: 'Software & DevOps',
+    category: 'Cloud & DevOps',
     items: [
-      'React',
-      'REST APIs',
-      'gRPC',
-      'Docker',
-      'Kubernetes',
-      'Helm',
-      'Git',
-      'Grafana / Loki / Tempo',
-      'Microservices',
+      'AWS (S3, Lambda)', 'Git / GitHub', 'Docker', 'Kubernetes', 'Helm', 'REST APIs', 'gRPC', 'Microservices',
+      'Grafana (Loki, Tempo)', 'LocalStack', 'Minikube', 'Linux', 'Regex',
     ],
   },
   {
     category: 'Design & Fabrication',
-    items: ['Autodesk Inventor', 'Blender', 'Figma', 'Laser Cutting', '3D Printing', 'Band/Chop Saw'],
+    items: ['Autodesk Inventor', 'Onshape', 'SketchUp', 'Blender', 'Cinema 4D', 'Figma', '3D Printing', 'Laser Cutting', 'Shop Tools'],
   },
 ]
 
 export const publication = {
   title: 'The Ethics and Legal Treatment Which Should Govern Artificial Intelligence',
   publisher: 'Curieux Academic Journal',
-  date: 'October 2024',
+  date: 'Oct 2024',
   page: 'p. 55',
   url: 'https://www.curieuxacademicjournal.com/_files/ugd/99711c_95397c2ad29e43af88a4539dd7344073.pdf',
   abstract:
@@ -246,23 +234,25 @@ export const publication = {
 
 export const activities = [
   {
-    name: 'FRC — Team 2367, Lancer Robotics',
-    period: 'Aug 2022 – May 2026',
-    detail: 'Hybrid member across CAD, Mechanical, Electrical, and Code; our alliance placed 1st at the 2026 Central Valley District/Regional competition.',
+    name: 'Aerospace Club, Saint Francis',
+    period: 'Co-President',
+    detail: 'Co-led pilot talks and airport tours; presented projects on space and green aviation.',
   },
   {
     name: 'Machine Learning & AI Club',
-    period: 'Aug 2022 – May 2026',
+    period: 'Member',
     detail: 'Researched advances in ML and computer vision for object recognition; trained models for club projects.',
   },
   {
-    name: 'Aerospace Club at Saint Francis',
-    period: 'Aug 2022 – May 2026',
-    detail: 'Co-President — co-led pilot talks and airport tours; presented projects on space and green aviation.',
+    name: 'Second Harvest Food Bank of Silicon Valley',
+    period: 'Volunteer',
+    detail: 'Sorted food for families in need — helped provide food for roughly 35,000 people.',
   },
   {
-    name: 'Second Harvest Food Bank of Silicon Valley',
-    period: 'Aug 2022 – Jun 2026',
-    detail: 'Volunteer sorting food for families in need — contributed to helping roughly 35,000 people over the years.',
+    name: 'Red Cross–certified Lifeguard, YMCA',
+    period: '2023',
+    detail: 'Certified lifeguard.',
   },
 ]
+
+export const languages = 'English (fluent) · French (intermediate) · Hindi & Tamil (conversational)'

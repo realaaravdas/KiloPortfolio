@@ -1,33 +1,40 @@
-import SectionHeading from './SectionHeading'
-import Reveal from './Reveal'
-import { skills } from '../data/resume'
+import { motion } from 'framer-motion'
+import { sectionStats, skills } from '../data/resume'
+import Section, { Tag } from './Section'
 
 export default function Skills() {
   return (
-    <section id="skills" className="mx-auto max-w-6xl px-6 py-24">
-      <SectionHeading eyebrow="04 / Skills" title="Tools I work with" />
-
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {skills.map((group, i) => (
-          <Reveal
-            key={group.category}
-            delay={i * 70}
-            className="lift-on-hover rounded-lg border border-border bg-surface p-6"
+    <Section
+      id="skills"
+      index="02"
+      code="SKILLS"
+      title="Stack & tooling"
+      kicker="From firmware-adjacent Python and C++ to the perception, control, and deployment layers around a robot."
+      side="left"
+      stats={sectionStats.skills}
+    >
+      <div className="divide-y divide-border border-y border-border">
+        {skills.map((g, i) => (
+          <motion.div
+            key={g.category}
+            className="grid gap-3 py-4 sm:grid-cols-[9.5rem_1fr]"
+            initial={{ opacity: 0, x: -14 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+            transition={{ duration: 0.6, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h3 className="font-mono text-sm text-accent">{group.category}</h3>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {group.items.map((item) => (
-                <span
-                  key={item}
-                  className="rounded-md bg-surface-2 border border-border px-2.5 py-1 text-sm text-ink"
-                >
-                  {item}
-                </span>
+            <h3 className="label text-ink/80">
+              <span className="mr-2 text-accent">{String(i + 1).padStart(2, '0')}</span>
+              {g.category}
+            </h3>
+            <div className="flex flex-wrap gap-1.5">
+              {g.items.map((s) => (
+                <Tag key={s}>{s}</Tag>
               ))}
             </div>
-          </Reveal>
+          </motion.div>
         ))}
       </div>
-    </section>
+    </Section>
   )
 }

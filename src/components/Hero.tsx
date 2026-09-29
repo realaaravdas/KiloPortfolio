@@ -1,73 +1,70 @@
-import { ArrowDown, Mail } from 'lucide-react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { ArrowDown, ArrowDownToLine } from 'lucide-react'
 import { profile, stats } from '../data/resume'
-import GithubIcon from './icons/GithubIcon'
 import CtaLink from './CtaLink'
-import Reveal from './Reveal'
-import profilePhoto from '../assets/photos/aarav-profile.jpg'
 
-export default function Hero() {
+const line = {
+  hidden: { opacity: 0, y: '60%' },
+  show: { opacity: 1, y: '0%', transition: { duration: 1, ease: [0.16, 1, 0.3, 1] as const } },
+}
+
+export default function Hero({ ready }: { ready: boolean }) {
+  const { scrollY } = useScroll()
+  const fade = useTransform(scrollY, [0, 420], [1, 0])
+  const lift = useTransform(scrollY, [0, 420], [0, -60])
+
   return (
-    <section id="top" className="relative overflow-hidden bg-grid">
-      <div className="pointer-events-none absolute -top-32 left-1/2 h-96 w-[42rem] -translate-x-1/2 rounded-full bg-accent/10 blur-[130px]" />
+    <section id="top" className="relative flex min-h-[100svh] flex-col justify-end pb-24 pt-24 sm:pb-28">
+      <motion.div style={{ opacity: fade, y: lift }} className="pointer-events-auto relative z-10 mx-auto w-full max-w-[100rem] px-5 sm:px-8 lg:px-14">
+        <motion.div initial="hidden" animate={ready ? 'show' : 'hidden'} transition={{ staggerChildren: 0.12, delayChildren: 0.15 }}>
+          <motion.p variants={line} className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] uppercase tracking-[0.18em] text-muted sm:text-xs">
+            <span className="text-accent">● SYS.ONLINE</span>
+            <span>Portfolio / 2026</span>
+            <span className="hidden sm:inline">37.0°N 122.1°W</span>
+          </motion.p>
 
-      <div className="relative mx-auto max-w-6xl px-6 pt-24 pb-20 sm:pt-32 sm:pb-28">
-        <div className="flex flex-col-reverse items-center gap-10 sm:flex-row sm:items-center sm:justify-between sm:gap-12">
-          <Reveal className="max-w-2xl">
-            <p className="font-mono text-sm text-accent mb-5">
-              $ whoami <span className="text-muted">— robotics + software</span>
-            </p>
+          <h1 className="font-head text-[clamp(5rem,19vw,17rem)] text-ink">
+            <span className="block overflow-hidden pb-[0.04em]">
+              <motion.span variants={line} className="block">Aarav</motion.span>
+            </span>
+            <span className="block overflow-hidden pb-[0.04em]">
+              <motion.span variants={line} className="block text-transparent [-webkit-text-stroke:1.5px_rgba(255,255,255,0.9)] sm:[-webkit-text-stroke:2px_rgba(255,255,255,0.9)]">
+                Das
+              </motion.span>
+            </span>
+          </h1>
 
-            <h1 className="font-display text-4xl sm:text-6xl font-semibold leading-[1.05] text-ink">
-              {profile.name}
-            </h1>
-            <p className="mt-4 font-display text-xl sm:text-2xl text-accent">{profile.role}</p>
-
-            <p className="mt-6 max-w-2xl text-muted text-base sm:text-lg leading-relaxed">
-              {profile.summary}
-            </p>
-          </Reveal>
-
-          <Reveal delay={80} className="shrink-0">
-            <div
-              data-cursor-hover
-              className="h-36 w-36 sm:h-48 sm:w-48 lg:h-56 lg:w-56 rounded-full overflow-hidden border-2 border-accent/40 shadow-[0_0_60px_var(--color-accent-soft)]"
-            >
-              <img
-                src={profilePhoto}
-                alt="Aarav Das"
-                className="h-full w-full object-cover"
-                width={700}
-                height={700}
-              />
+          <motion.div variants={line} className="mt-6 grid gap-6 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-6">
+              <p className="font-mono text-sm uppercase tracking-[0.16em] text-ink sm:text-base">
+                {profile.title}
+                <span className="text-accent"> // </span>
+                <span className="text-muted">{profile.focus}</span>
+              </p>
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
+                B.S. Robotics Engineering, UC Santa Cruz. Perception, SLAM, and control on embedded hardware, plus the cloud services around it.
+              </p>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <CtaLink href="#about" icon={ArrowDown} solid>
+                  Explore
+                </CtaLink>
+                <CtaLink href={profile.resumeUrl} icon={ArrowDownToLine}>
+                  Download resume
+                </CtaLink>
+              </div>
             </div>
-          </Reveal>
-        </div>
 
-        <Reveal delay={180} className="mt-9 flex flex-wrap items-center gap-4">
-          <CtaLink href="#projects" icon={ArrowDown} solid>
-            View my work
-          </CtaLink>
-          <CtaLink href={`mailto:${profile.email}`} icon={Mail}>
-            Get in touch
-          </CtaLink>
-          <CtaLink href={profile.github} icon={GithubIcon}>
-            GitHub
-          </CtaLink>
-        </Reveal>
-
-        <Reveal
-          delay={280}
-          as="dl"
-          className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-6 border-t border-border pt-8"
-        >
-          {stats.map((s) => (
-            <div key={s.label}>
-              <dt className="font-mono text-xs uppercase tracking-wider text-muted">{s.label}</dt>
-              <dd className="mt-1 font-display text-2xl font-semibold text-ink">{s.value}</dd>
-            </div>
-          ))}
-        </Reveal>
-      </div>
+            <dl className="hidden grid-cols-4 gap-px self-end border border-border bg-border lg:col-span-6 lg:grid xl:col-span-5 xl:col-start-8">
+              {stats.map((s) => (
+                <div key={s.label} className="bg-black/70 p-3 backdrop-blur-sm">
+                  <dt className="label text-[10px] leading-snug">{s.label}</dt>
+                  <dd className="mt-2 font-mono text-base text-ink">{s.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </section>
   )
 }

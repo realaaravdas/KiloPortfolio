@@ -1,76 +1,53 @@
-import { Sparkles } from 'lucide-react'
-import SectionHeading from './SectionHeading'
-import Reveal from './Reveal'
-import { projects } from '../data/resume'
+import { motion } from 'framer-motion'
+import { projects, sectionStats } from '../data/resume'
+import Section, { Tag } from './Section'
 
 export default function Projects() {
   return (
-    <section id="projects" className="mx-auto max-w-6xl px-6 py-24">
-      <SectionHeading
-        eyebrow="03 / Projects"
-        title="Things I've built"
-        description="A mix of robotics and full-stack software projects, built independently."
-      />
-
-      <div className="grid sm:grid-cols-2 gap-6">
+    <Section
+      id="projects"
+      index="04"
+      code="FEATURED PROJECTS"
+      title="Selected builds"
+      kicker="Robots, simulation, and tooling — built end to end, from the sensor to the deployment."
+      side="left"
+      stats={sectionStats.projects}
+      wide
+    >
+      <div className="space-y-4">
         {projects.map((p, i) => (
-          <Reveal
+          <motion.article
             key={p.title}
-            delay={i * 80}
-            as="article"
-            className={`group relative flex flex-col lift-on-hover rounded-lg border p-6 sm:p-7 transition-colors ${
-              p.featured ? 'border-accent/40 bg-surface-2' : 'border-border bg-surface'
-            } hover:border-accent/60`}
+            data-cursor-hover
+            className="lift-on-hover group relative border border-border bg-black/40 p-5 sm:p-6"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '0px 0px -12% 0px' }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
-            {p.featured && (
-              <span className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1 font-mono text-xs text-accent">
-                <Sparkles size={12} />
-                Flagship
-              </span>
-            )}
-
-            <div className="flex items-start justify-between gap-3">
-              <h3 className="font-display text-lg font-semibold text-ink">{p.title}</h3>
+            <span className="absolute left-0 top-0 h-full w-px origin-top scale-y-0 bg-accent transition-transform duration-500 group-hover:scale-y-100" />
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent">PRJ-{String(i + 1).padStart(2, '0')}</p>
+              <p className="font-mono text-xs text-muted">{p.period}</p>
             </div>
-            <p className="mt-1 font-mono text-xs text-muted">{p.period}</p>
-
-            <p className="mt-3 text-sm text-muted leading-relaxed">{p.description}</p>
-
-            <ul className="mt-4 space-y-2">
+            <h3 className="font-head mt-2 text-3xl text-ink sm:text-4xl">{p.title}</h3>
+            <p className="mt-3 text-sm leading-relaxed text-muted">{p.description}</p>
+            <ul className="mt-4 space-y-1.5">
               {p.bullets.map((b) => (
-                <li key={b} className="flex gap-3 text-sm text-muted leading-relaxed">
-                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
+                <li key={b} className="flex gap-3 text-[13px] leading-relaxed text-muted/90">
+                  <span className="mt-2 h-px w-3 shrink-0 bg-border-strong" />
                   {b}
                 </li>
               ))}
             </ul>
-
-            <div className="mt-5 flex flex-wrap gap-2 pt-1">
+            <div className="mt-4 flex flex-wrap gap-1.5">
               {p.tags.map((t) => (
-                <span
-                  key={t}
-                  className="rounded-full border border-border px-3 py-1 font-mono text-xs text-muted"
-                >
-                  {t}
-                </span>
+                <Tag key={t}>{t}</Tag>
               ))}
             </div>
-          </Reveal>
+          </motion.article>
         ))}
       </div>
-
-      <p className="mt-8 text-sm text-muted">
-        More on my{' '}
-        <a
-          href="https://github.com/realaaravdas"
-          target="_blank"
-          rel="noreferrer"
-          className="text-accent hover:underline"
-        >
-          GitHub
-        </a>
-        .
-      </p>
-    </section>
+    </Section>
   )
 }

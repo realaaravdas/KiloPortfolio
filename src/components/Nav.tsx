@@ -1,104 +1,77 @@
-import { useEffect, useState } from 'react'
-import { Mail, Menu, X } from 'lucide-react'
+import { useState } from 'react'
+import { useMotionValueEvent } from 'framer-motion'
+import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { profile } from '../data/resume'
-import GithubIcon from './icons/GithubIcon'
-import LinkedinIcon from './icons/LinkedinIcon'
+import { STAGES, stage } from '../state/stage'
+import Logo from './Logo'
 
-const links = [
-  { href: '#about', label: 'About' },
-  { href: '#experience', label: 'Experience' },
-  { href: '#projects', label: 'Projects' },
-  { href: '#skills', label: 'Skills' },
-  { href: '#education', label: 'Education' },
-  { href: '#contact', label: 'Contact' },
-]
+const links = STAGES.slice(1)
 
 export default function Nav() {
-  const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8)
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  const [active, setActive] = useState(0)
+  useMotionValueEvent(stage, 'change', (v) => setActive(Math.round(v)))
 
   return (
-    <header
-      className={`sticky top-0 z-50 transition-colors ${
-        scrolled ? 'bg-bg/85 backdrop-blur border-b border-border' : 'bg-transparent'
-      }`}
-    >
-      <nav className="mx-auto max-w-6xl px-6 flex items-center justify-between h-16">
-        <a href="#top" className="font-display font-semibold text-ink tracking-tight">
-          Aarav<span className="text-accent">.</span>Das
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-black/55 backdrop-blur-md">
+      <nav className="mx-auto flex h-14 max-w-[100rem] items-center justify-between px-5 sm:px-8">
+        <a href="#top" className="flex items-center gap-3 text-ink" aria-label="Aarav Das — home">
+          <Logo />
+          <span className="font-head hidden text-xl leading-none sm:block">
+            Aarav Das
+          </span>
+          <span className="label hidden border-l border-border pl-3 lg:block">Robotics · AI</span>
         </a>
 
-        <ul className="hidden md:flex items-center gap-8 font-mono text-sm text-muted">
-          {links.map((l) => (
-            <li key={l.href}>
-              <a href={l.href} className="hover:text-accent transition-colors">
+        <ul className="hidden items-center gap-1 md:flex">
+          {links.map((l, i) => (
+            <li key={l.id}>
+              <a
+                href={`#${l.id}`}
+                className={`flex items-center gap-2 px-3 py-2 font-mono text-xs uppercase tracking-[0.12em] transition-colors hover:text-ink ${
+                  active === i + 1 ? 'text-ink' : 'text-muted'
+                }`}
+              >
+                <span className={active === i + 1 ? 'text-accent' : 'text-dim'}>{l.code}</span>
                 {l.label}
               </a>
             </li>
           ))}
         </ul>
 
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden items-center gap-4 md:flex">
+          <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+            </span>
+            Open to internships
+          </span>
           <a
-            href={profile.github}
-            target="_blank"
-            rel="noreferrer"
-            className="text-muted hover:text-accent transition-colors"
-            aria-label="GitHub"
+            href={profile.resumeUrl}
+            download
+            className="flex items-center gap-1.5 border border-border-strong px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] text-ink transition-colors hover:border-accent hover:text-accent"
           >
-            <GithubIcon size={20} />
-          </a>
-          <a
-            href={profile.linkedin}
-            target="_blank"
-            rel="noreferrer"
-            className="text-muted hover:text-accent transition-colors"
-            aria-label="LinkedIn"
-          >
-            <LinkedinIcon size={20} />
-          </a>
-          <a
-            href={`mailto:${profile.email}`}
-            className="text-muted hover:text-accent transition-colors"
-            aria-label="Email"
-          >
-            <Mail size={20} />
+            Resume <ArrowUpRight size={13} />
           </a>
         </div>
 
-        <button
-          className="md:hidden text-ink"
-          onClick={() => setOpen((v) => !v)}
-          aria-label="Toggle menu"
-        >
+        <button className="text-ink md:hidden" onClick={() => setOpen((v) => !v)} aria-label="Toggle menu" aria-expanded={open}>
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </nav>
 
       {open && (
-        <div className="md:hidden border-t border-border bg-bg px-6 py-4 flex flex-col gap-4 font-mono text-sm">
+        <div className="flex flex-col gap-1 border-t border-border bg-black/95 px-5 py-4 md:hidden">
           {links.map((l) => (
-            <a key={l.href} href={l.href} className="text-muted hover:text-accent" onClick={() => setOpen(false)}>
+            <a key={l.id} href={`#${l.id}`} onClick={() => setOpen(false)} className="flex gap-3 py-2.5 font-mono text-sm uppercase tracking-[0.12em] text-muted hover:text-ink">
+              <span className="text-accent">{l.code}</span>
               {l.label}
             </a>
           ))}
-          <div className="flex items-center gap-4 pt-2 border-t border-border">
-            <a href={profile.github} target="_blank" rel="noreferrer" className="text-muted hover:text-accent">
-              <GithubIcon size={20} />
-            </a>
-            <a href={profile.linkedin} target="_blank" rel="noreferrer" className="text-muted hover:text-accent">
-              <LinkedinIcon size={20} />
-            </a>
-            <a href={`mailto:${profile.email}`} className="text-muted hover:text-accent">
-              <Mail size={20} />
-            </a>
-          </div>
+          <a href={profile.resumeUrl} download className="mt-2 flex items-center gap-2 border-t border-border pt-4 font-mono text-sm uppercase tracking-[0.12em] text-ink">
+            Download resume <ArrowUpRight size={14} />
+          </a>
         </div>
       )}
     </header>

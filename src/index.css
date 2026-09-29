@@ -1,16 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-sans: "Inter Variable", "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;
 
   --color-bg: #000000;
-  --color-surface: #0d0d0d;
-  --color-surface-2: #141414;
+  --color-surface: #0a0a0a;
+  --color-surface-2: #121212;
   --color-border: rgb(255 255 255 / 12%);
+  --color-border-strong: rgb(255 255 255 / 24%);
   --color-ink: #ffffff;
   --color-muted: rgb(255 255 255 / 58%);
+  --color-dim: rgb(255 255 255 / 34%);
   --color-accent: #38f0d8;
   --color-accent-soft: rgb(56 240 216 / 14%);
 }
@@ -22,6 +24,7 @@
 
   html {
     scroll-behavior: smooth;
+    background: #000;
   }
 
   body {
@@ -31,6 +34,7 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
 
   ::selection {
@@ -40,22 +44,46 @@
 }
 
 @layer utilities {
-  .bg-grid {
-    background-image:
-      linear-gradient(to right, #ffffff08 1px, transparent 1px),
-      linear-gradient(to bottom, #ffffff08 1px, transparent 1px);
-    background-size: 44px 44px;
+  .font-head {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.005em;
+    line-height: 0.92;
   }
 
-  .text-glow {
-    text-shadow: 0 0 32px var(--color-accent-soft);
+  /* mono metadata label */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  /* fine engineering grid */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, #ffffff0a 1px, transparent 1px),
+      linear-gradient(to bottom, #ffffff0a 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .scanlines::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(to bottom, transparent 0 2px, rgb(0 0 0 / 22%) 2px 3px);
+    mix-blend-mode: multiply;
   }
 
   .lift-on-hover {
-    transition: transform 0.25s ease;
+    transition: transform 0.25s ease, border-color 0.25s ease;
   }
   .lift-on-hover:hover {
-    transform: translateY(-4px);
+    transform: translateY(-3px);
+    border-color: var(--color-border-strong);
   }
 }
 
@@ -90,7 +118,8 @@
   background: transparent;
   color: rgb(255 255 255 / 62%);
   font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
   text-decoration: none;
   white-space: nowrap;
   overflow: hidden;
@@ -128,15 +157,14 @@
 }
 
 .cta-pill-solid {
-  border-color: var(--color-accent);
-  background: var(--color-accent);
-  color: #04110d;
+  border-color: #fff;
+  background: #fff;
+  color: #000;
 }
 .cta-pill-solid:hover {
   border-color: var(--color-accent);
   background: var(--color-accent);
   color: #04110d;
-  opacity: 0.88;
 }
 
 /* ---- Custom cursor (ported from moonshot.ai's ring + dot) ---- */
