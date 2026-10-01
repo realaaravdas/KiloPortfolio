@@ -12,7 +12,7 @@ export const profile = {
 
 export const stats = [
   { label: 'Years on FRC Code Team', value: '4+' },
-  { label: 'Personal Projects Shipped', value: '5' },
+  { label: 'Personal Projects', value: '7' },
   { label: 'Internship', value: 'CurieTech AI' },
   { label: 'Published Paper', value: '1' },
 ]
@@ -70,19 +70,6 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    title: 'Autonomous Tennis Ball Collector',
-    period: 'Personal Project',
-    description:
-      'A robot that autonomously locates and collects tennis balls off a court, combining SLAM mapping, radar, and vision for reliable detection in a cluttered outdoor environment.',
-    bullets: [
-      'Fused SLAM tracking with mmWave radar and computer vision for robust ball detection and localization.',
-      'Ran the full perception and control stack on a Raspberry Pi 4B+.',
-      'Designed the collection mechanism and navigation logic end to end, from hardware to software.',
-    ],
-    tags: ['SLAM', 'mmWave Radar', 'Computer Vision', 'Raspberry Pi', 'Python'],
-    featured: true,
-  },
-  {
     title: 'Rust Racer',
     period: 'Personal Project',
     description:
@@ -97,28 +84,43 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    title: 'Code-to-CAD Generator',
+    title: 'XNav',
     period: 'Personal Project',
     description:
-      'A Python application, built from scratch, that converts code into CAD designs — complete with an integrated AI assistant and live rendering.',
+      'A from-scratch, open-source AprilTag vision coprocessor for FRC robots — a DIY replacement for the commercial Limelight 3, built to run on the same Raspberry Pi Compute Module 4 hardware.',
     bullets: [
-      'Parses design intent from code and generates corresponding CAD geometry.',
-      'Integrated an AI assistant to help refine and iterate on designs conversationally.',
-      'Built a rendering pipeline to preview generated models.',
+      'Built a full vision pipeline in Python — V4L2 camera capture, AprilTag detection with PnP 3D pose estimation, and field-relative localization from a WPILib .fmap field map.',
+      'Published results over WPILib-compatible NetworkTables 4, plus a C++ client library (XNavLib) that drops directly into FRC robot code.',
+      'Built a Flask + SocketIO web dashboard for live camera/tag monitoring, checkerboard camera calibration, and full system configuration.',
+      'Packaged the whole stack as a flashable, offline-first Raspberry Pi image that boots headless with no first-run setup.',
     ],
-    tags: ['Python', 'CAD', 'AI Agents', 'Rendering'],
+    tags: ['Python', 'C++', 'Computer Vision', 'AprilTag', 'NetworkTables', 'WPILib', 'Raspberry Pi'],
     featured: true,
   },
   {
-    title: 'College Acceptance Estimator',
+    title: 'Code-to-CAD Generator',
     period: 'Personal Project',
     description:
-      'A tool that scrapes college admissions data and uses the Gemini API to estimate a student\'s acceptance chances at a given school.',
+      'A Python application, built from scratch, that compiles a custom design language into CAD geometry with a live rendering pipeline to preview the results.',
     bullets: [
-      'Built with Google AI Studio and the Gemini API on a Node.js backend.',
-      'Designed data-scraping workflows to keep admissions data current.',
+      'Designed a small custom language for describing CAD geometry in code.',
+      'Built a parser and rendering pipeline that compiles that language into previewable 3D models.',
+      'Prototyping an AI assistant to help generate and refine designs conversationally.',
     ],
-    tags: ['Node.js', 'Gemini API', 'Data Scraping'],
+    tags: ['Python', 'CAD', 'Rendering', 'Language Design'],
+    featured: true,
+  },
+  {
+    title: 'College Compass',
+    period: 'Personal Project',
+    description:
+      'A dashboard for tracking college applications — essay progress, offered majors, and an AI-powered acceptance estimator — across every school on your list.',
+    bullets: [
+      'Built an AI acceptance estimator with the Gemini API that weighs GPA, SAT/ACT, residency, and intended major per school.',
+      'Added a "target profile" generator that shows what a roughly 50%-chance applicant looks like for a given major and school.',
+      'Built an essay tracker and an offered-majors lookup, scraped and cached per college, alongside deadline and acceptance-rate data.',
+    ],
+    tags: ['Node.js', 'Gemini API', 'Data Scraping', 'Dashboard'],
   },
   {
     title: 'Automated Repo Documentation Engine',
@@ -141,6 +143,18 @@ export const projects: Project[] = [
       'Detects and resolves common chart configuration errors to reduce deployment failures.',
     ],
     tags: ['Java', 'Kubernetes', 'Helm', 'DevOps'],
+  },
+  {
+    title: 'Autonomous Tennis Ball Collector',
+    period: 'Personal Project',
+    description:
+      'A robot that autonomously locates and collects tennis balls off a court, combining SLAM mapping, radar, and vision for reliable detection in a cluttered outdoor environment.',
+    bullets: [
+      'Fused SLAM tracking with mmWave radar and computer vision for robust ball detection and localization.',
+      'Ran the full perception and control stack on a Raspberry Pi 4B+.',
+      'Designed the collection mechanism and navigation logic end to end, from hardware to software.',
+    ],
+    tags: ['SLAM', 'mmWave Radar', 'Computer Vision', 'Raspberry Pi', 'Python'],
   },
 ]
 
