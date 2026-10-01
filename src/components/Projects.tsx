@@ -10,6 +10,9 @@ import collegeCompass2 from '../assets/photos/college-compass-2.jpg'
 import collegeCompass3 from '../assets/photos/college-compass-3.jpg'
 import collegeCompass4 from '../assets/photos/college-compass-4.jpg'
 import collegeCompass5 from '../assets/photos/college-compass-5.jpg'
+import codedocs1 from '../assets/photos/codedocs-1.jpg'
+import codedocs2 from '../assets/photos/codedocs-2.jpg'
+import codedocs3 from '../assets/photos/codedocs-3.jpg'
 
 type ProjectMedia =
   | { type: 'video'; src: string; poster: string }
@@ -33,6 +36,14 @@ const projectMedia: Record<string, ProjectMedia> = {
       { src: collegeCompass3, alt: 'AI-generated target applicant profile' },
       { src: collegeCompass4, alt: 'College Compass dashboard for KTH Royal Institute of Technology' },
       { src: collegeCompass5, alt: 'Acceptance estimate for UC Santa Cruz' },
+    ],
+  },
+  CodeDocs: {
+    type: 'carousel',
+    items: [
+      { src: codedocs1, alt: 'CodeDocs app showing API key, folder upload, and doc structure fields' },
+      { src: codedocs2, alt: 'CodeDocs custom prompt field and Generate Documentation button' },
+      { src: codedocs3, alt: 'CodeDocs with a project folder uploaded, showing its file tree' },
     ],
   },
 }
