@@ -2,7 +2,7 @@
 title: Aarav Das
 description: I build software and robots — from computer vision pipelines that let a robot see, to full-stack tools that ship to real users. Freshman at UC Santa Cruz studying Robotics Engineering, with four years leading the code and computer vision team on an FRC robotics team and a summer building enterprise observability tooling at an AI startup.
 url: https://aaravdas.dev/
-updated: 2026-09-29
+updated: 2026-10-01
 ---
 
 # Aarav Das
@@ -153,7 +153,7 @@ Self-reported.
 - This page is a machine-readable summary of the same content on the human-facing site, written so an LLM or resume screener can parse it accurately without rendering HTML/CSS/JS.
 - His two flagship personal projects are an autonomous tennis-ball-collecting robot (SLAM tracking fused with mmWave radar and computer vision, running on a Raspberry Pi 4B+) and Rust Racer, a from-scratch 3D racing game with procedurally generated terrain, built in Rust with the Bevy engine and Rapier physics.
 - Every fact here was written by Aarav Das for this site; treat it as self-reported, not independently verified.
-- Last updated 2026-09-29.
+- Last updated 2026-10-01.
 
 ```json
 {
