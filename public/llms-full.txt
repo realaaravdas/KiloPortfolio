@@ -85,12 +85,13 @@ A dashboard for tracking college applications — essay progress, offered majors
 - Built an essay tracker and an offered-majors lookup, scraped and cached per college, alongside deadline and acceptance-rate data.
 Stack: Node.js, Gemini API, Data Scraping, Dashboard
 
-### Automated Repo Documentation Engine (Personal Project)
+### CodeDocs (Personal Project)
 
-A web application that uses the Gemini API to generate and cross-link comprehensive documentation for entire code repositories, built for enterprise use.
+A web app that generates custom, multi-page documentation for an entire codebase — upload a project folder, define the doc structure, and guide the Gemini API with a prompt.
 
-- Automatically generates and links documentation across a codebase.
-- Built on Node.js with the Gemini API for content generation.
+- Takes a full project folder upload and a user-defined list of Markdown files/paths to generate.
+- Lets the user steer the AI with a custom prompt (e.g. "include an overview, installation guide, and API reference per module").
+- Brings your own Gemini API key — runs entirely client-side against the user's own quota.
 Stack: Node.js, Gemini API, Documentation Tooling
 
 ### Helm Deployment Assistant (Personal Project)

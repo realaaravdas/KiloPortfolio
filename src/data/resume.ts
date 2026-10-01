@@ -123,13 +123,14 @@ export const projects: Project[] = [
     tags: ['Node.js', 'Gemini API', 'Data Scraping', 'Dashboard'],
   },
   {
-    title: 'Automated Repo Documentation Engine',
+    title: 'CodeDocs',
     period: 'Personal Project',
     description:
-      'A web application that uses the Gemini API to generate and cross-link comprehensive documentation for entire code repositories, built for enterprise use.',
+      'A web app that generates custom, multi-page documentation for an entire codebase — upload a project folder, define the doc structure, and guide the Gemini API with a prompt.',
     bullets: [
-      'Automatically generates and links documentation across a codebase.',
-      'Built on Node.js with the Gemini API for content generation.',
+      'Takes a full project folder upload and a user-defined list of Markdown files/paths to generate.',
+      'Lets the user steer the AI with a custom prompt (e.g. "include an overview, installation guide, and API reference per module").',
+      'Brings your own Gemini API key — runs entirely client-side against the user\'s own quota.',
     ],
     tags: ['Node.js', 'Gemini API', 'Documentation Tooling'],
   },
