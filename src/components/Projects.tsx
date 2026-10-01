@@ -3,13 +3,21 @@ import SectionHeading from './SectionHeading'
 import Reveal from './Reveal'
 import { projects } from '../data/resume'
 import rustRacerPoster from '../assets/photos/rust-racer-poster.jpg'
+import xnavBanner from '../assets/photos/xnav-banner.jpg'
 
 type ProjectMedia =
   | { type: 'video'; src: string; poster: string }
   | { type: 'images'; items: { src: string; alt: string }[] }
+  | { type: 'banner'; src: string; alt: string; caption?: string }
 
 const projectMedia: Record<string, ProjectMedia> = {
   'Rust Racer': { type: 'video', src: '/videos/rust-racer.mp4', poster: rustRacerPoster },
+  XNav: {
+    type: 'banner',
+    src: xnavBanner,
+    alt: 'XNav concept art depicting a robot navigating by AprilTags',
+    caption: 'Concept art, not an actual product screenshot.',
+  },
 }
 
 export default function Projects() {
@@ -58,6 +66,15 @@ export default function Projects() {
                 >
                   <source src={media.src} type="video/mp4" />
                 </video>
+              )}
+
+              {media?.type === 'banner' && (
+                <div className="mt-4">
+                  <div data-cursor-hover className="overflow-hidden rounded-md border border-border">
+                    <img src={media.src} alt={media.alt} loading="lazy" className="h-auto w-full object-cover" />
+                  </div>
+                  {media.caption && <p className="mt-1.5 font-mono text-xs text-muted italic">{media.caption}</p>}
+                </div>
               )}
 
               {media?.type === 'images' && (
