@@ -111,15 +111,16 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    title: 'College Acceptance Estimator',
+    title: 'College Compass',
     period: 'Personal Project',
     description:
-      'A tool that scrapes college admissions data and uses the Gemini API to estimate a student\'s acceptance chances at a given school.',
+      'A dashboard for tracking college applications — essay progress, offered majors, and an AI-powered acceptance estimator — across every school on your list.',
     bullets: [
-      'Built with Google AI Studio and the Gemini API on a Node.js backend.',
-      'Designed data-scraping workflows to keep admissions data current.',
+      'Built an AI acceptance estimator with the Gemini API that weighs GPA, SAT/ACT, residency, and intended major per school.',
+      'Added a "target profile" generator that shows what a roughly 50%-chance applicant looks like for a given major and school.',
+      'Built an essay tracker and an offered-majors lookup, scraped and cached per college, alongside deadline and acceptance-rate data.',
     ],
-    tags: ['Node.js', 'Gemini API', 'Data Scraping'],
+    tags: ['Node.js', 'Gemini API', 'Data Scraping', 'Dashboard'],
   },
   {
     title: 'Automated Repo Documentation Engine',

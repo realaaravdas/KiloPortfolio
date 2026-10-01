@@ -1,14 +1,21 @@
 import { Sparkles } from 'lucide-react'
 import SectionHeading from './SectionHeading'
 import Reveal from './Reveal'
+import Carousel from './Carousel'
 import { projects } from '../data/resume'
 import rustRacerPoster from '../assets/photos/rust-racer-poster.jpg'
 import xnavBanner from '../assets/photos/xnav-banner.jpg'
+import collegeCompass1 from '../assets/photos/college-compass-1.jpg'
+import collegeCompass2 from '../assets/photos/college-compass-2.jpg'
+import collegeCompass3 from '../assets/photos/college-compass-3.jpg'
+import collegeCompass4 from '../assets/photos/college-compass-4.jpg'
+import collegeCompass5 from '../assets/photos/college-compass-5.jpg'
 
 type ProjectMedia =
   | { type: 'video'; src: string; poster: string }
   | { type: 'images'; items: { src: string; alt: string }[] }
   | { type: 'banner'; src: string; alt: string; caption?: string }
+  | { type: 'carousel'; items: { src: string; alt: string }[] }
 
 const projectMedia: Record<string, ProjectMedia> = {
   'Rust Racer': { type: 'video', src: '/videos/rust-racer.mp4', poster: rustRacerPoster },
@@ -17,6 +24,16 @@ const projectMedia: Record<string, ProjectMedia> = {
     src: xnavBanner,
     alt: 'XNav concept art depicting a robot navigating by AprilTags',
     caption: 'Concept art, not an actual product screenshot.',
+  },
+  'College Compass': {
+    type: 'carousel',
+    items: [
+      { src: collegeCompass1, alt: 'College Compass dashboard for Harvard University' },
+      { src: collegeCompass2, alt: 'Essay tracker progress and AI acceptance estimate' },
+      { src: collegeCompass3, alt: 'AI-generated target applicant profile' },
+      { src: collegeCompass4, alt: 'College Compass dashboard for KTH Royal Institute of Technology' },
+      { src: collegeCompass5, alt: 'Acceptance estimate for UC Santa Cruz' },
+    ],
   },
 }
 
@@ -76,6 +93,8 @@ export default function Projects() {
                   {media.caption && <p className="mt-1.5 font-mono text-xs text-muted italic">{media.caption}</p>}
                 </div>
               )}
+
+              {media?.type === 'carousel' && <Carousel slides={media.items} />}
 
               {media?.type === 'images' && (
                 <div className="mt-4 grid grid-cols-3 gap-2">
