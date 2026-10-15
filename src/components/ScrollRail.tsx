@@ -10,22 +10,40 @@ const sections = [
   { id: 'contact', label: 'Contact' },
 ]
 
-const ACTIVE_SIZE = 26
-const SMALL_SIZE = 12
-const DOCK_SIZE = 18
-const ROW_STEP = 28
-const TOP_ANCHOR = 88
-const DOCK_LETTER_GAP = 1.08
+const ACTIVE_SIZE = 28
+const SMALL_SIZE = 13
+const DOCK_SIZE = 19
+const ROW_STEP = 36
+const TOP_ANCHOR = 92
+const DOCK_LETTER_GAP = 1.1
 
-const font = (size: number) => `600 ${size}px "Space Grotesk", "Inter", system-ui, sans-serif`
+// Transition timing: letters fire off STAGGER_MS apart and each takes DURATION_MS
+// to settle, so a word reads as a visible, sequential cascade rather than one
+// rigid block snapping into place.
+const STAGGER_MS = 28
+const DURATION_MS = 620
+
+const FONT_FAMILY = '"Inter", system-ui, sans-serif'
+const FONT_WEIGHT = 800
+
+const font = (size: number) => `${FONT_WEIGHT} ${size}px ${FONT_FAMILY}`
+
+function easeOutCubic(t: number) {
+  const c = Math.min(1, Math.max(0, t))
+  return 1 - Math.pow(1 - c, 3)
+}
 
 type Target = { x: number; y: number; rotate: number; scale: number; fontSize: number; bright: number }
 
 type Letter = {
   char: string
   sectionIndex: number
+  indexInWord: number
+  from: Target
+  to: Target
   current: Target
-  target: Target
+  animStart: number
+  delay: number
   el: HTMLSpanElement | null
 }
 
@@ -46,12 +64,23 @@ export default function ScrollRail() {
   const [activeIndex, setActiveIndex] = useState(0)
   const rafRef = useRef(0)
   const reducedMotionRef = useRef(false)
+  const firstLayoutRef = useRef(true)
 
   const letters = useMemo(() => {
     const list: Letter[] = []
     sections.forEach((s, si) => {
-      Array.from(s.label).forEach((ch) => {
-        list.push({ char: ch, sectionIndex: si, current: zeroTarget(), target: zeroTarget(), el: null })
+      Array.from(s.label).forEach((ch, li) => {
+        list.push({
+          char: ch,
+          sectionIndex: si,
+          indexInWord: li,
+          from: zeroTarget(),
+          to: zeroTarget(),
+          current: zeroTarget(),
+          animStart: 0,
+          delay: 0,
+          el: null,
+        })
       })
     })
     return list
@@ -78,18 +107,22 @@ export default function ScrollRail() {
   useEffect(() => {
     reducedMotionRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    function layout() {
+    function computeLayout() {
       const vw = window.innerWidth
       const vh = window.innerHeight
       const railRight = vw - 96
       const dockX = vw - 112
       const dockY = vh * 0.68
       const futureStartY = vh * 0.84
+      const now = performance.now()
+      const instant = firstLayoutRef.current || reducedMotionRef.current
 
       sections.forEach((s, si) => {
         const role: 'active' | 'passed' | 'next' | 'future' =
           si === activeIndex ? 'active' : si < activeIndex ? 'passed' : si === activeIndex + 1 ? 'next' : 'future'
         const wordLetters = letters.filter((l) => l.sectionIndex === si)
+
+        let positions: { x: number; y: number; rotate: number; scale: number; fontSize: number; bright: number }[]
 
         if (role === 'active' || role === 'passed') {
           const size = role === 'active' ? ACTIVE_SIZE : SMALL_SIZE
@@ -97,74 +130,71 @@ export default function ScrollRail() {
           const total = widths.reduce((a, b) => a + b, 0)
           const y = TOP_ANCHOR + si * ROW_STEP
           let cum = 0
-          wordLetters.forEach((l, i) => {
-            const w = widths[i]
-            l.target = {
-              x: railRight - total + cum + w / 2,
-              y,
-              rotate: 0,
-              scale: 1,
-              fontSize: size,
-              bright: role === 'active' ? 1 : 0,
-            }
+          positions = widths.map((w) => {
+            const x = railRight - total + cum + w / 2
             cum += w
+            return { x, y, rotate: 0, scale: 1, fontSize: size, bright: role === 'active' ? 1 : 0 }
           })
         } else if (role === 'next') {
           const widths = measureWidths(s.label, font(DOCK_SIZE))
           const advances = widths.map((w) => w * DOCK_LETTER_GAP)
           const total = advances.reduce((a, b) => a + b, 0)
           let cum = 0
-          wordLetters.forEach((l, i) => {
-            const adv = advances[i]
-            l.target = {
-              x: dockX,
-              y: dockY + total / 2 - cum - adv / 2,
-              rotate: -90,
-              scale: 1,
-              fontSize: DOCK_SIZE,
-              bright: 0,
-            }
+          positions = advances.map((adv) => {
+            const y = dockY + total / 2 - cum - adv / 2
             cum += adv
+            return { x: dockX, y, rotate: -90, scale: 1, fontSize: DOCK_SIZE, bright: 0 }
           })
         } else {
           const widths = measureWidths(s.label, font(SMALL_SIZE))
           const total = widths.reduce((a, b) => a + b, 0)
           const y = futureStartY + (si - activeIndex - 2) * ROW_STEP
           let cum = 0
-          wordLetters.forEach((l, i) => {
-            const w = widths[i]
-            l.target = { x: railRight - total + cum + w / 2, y, rotate: 0, scale: 1, fontSize: SMALL_SIZE, bright: 0 }
+          positions = widths.map((w) => {
+            const x = railRight - total + cum + w / 2
             cum += w
+            return { x, y, rotate: 0, scale: 1, fontSize: SMALL_SIZE, bright: 0 }
           })
         }
+
+        wordLetters.forEach((l, i) => {
+          const nextTarget = positions[i]
+          l.from = instant ? nextTarget : { ...l.current }
+          l.to = nextTarget
+          l.animStart = now
+          l.delay = instant ? 0 : l.indexInWord * STAGGER_MS
+          if (instant) l.current = { ...nextTarget }
+        })
       })
+
+      firstLayoutRef.current = false
     }
 
-    layout()
-    window.addEventListener('resize', layout)
-    return () => window.removeEventListener('resize', layout)
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(computeLayout)
+    }
+    computeLayout()
+
+    window.addEventListener('resize', computeLayout)
+    return () => window.removeEventListener('resize', computeLayout)
   }, [activeIndex, letters])
 
   useEffect(() => {
-    let last = performance.now()
-    const damp = 0.78
-
     function tick(now: number) {
-      const dt = now - last
-      last = now
-      const steps = (60 * dt) / 1000
-      const lerp = reducedMotionRef.current ? 1 : 1 - Math.pow(damp, steps)
-
       for (const l of letters) {
         if (!l.el) continue
+        const elapsed = now - l.animStart - l.delay
+        const duration = reducedMotionRef.current ? 0 : DURATION_MS
+        const progress = duration <= 0 ? 1 : easeOutCubic(elapsed / duration)
+        const clamped = Math.max(0, Math.min(1, elapsed < 0 ? 0 : progress))
+
         const c = l.current
-        const t = l.target
-        c.x += (t.x - c.x) * lerp
-        c.y += (t.y - c.y) * lerp
-        c.rotate += (t.rotate - c.rotate) * lerp
-        c.scale += (t.scale - c.scale) * lerp
-        c.fontSize += (t.fontSize - c.fontSize) * lerp
-        c.bright += (t.bright - c.bright) * lerp
+        c.x = l.from.x + (l.to.x - l.from.x) * clamped
+        c.y = l.from.y + (l.to.y - l.from.y) * clamped
+        c.rotate = l.from.rotate + (l.to.rotate - l.from.rotate) * clamped
+        c.scale = l.from.scale + (l.to.scale - l.from.scale) * clamped
+        c.fontSize = l.from.fontSize + (l.to.fontSize - l.from.fontSize) * clamped
+        c.bright = l.from.bright + (l.to.bright - l.from.bright) * clamped
 
         l.el.style.transform = `translate3d(${c.x}px, ${c.y}px, 0) translate(-50%, -50%) rotate(${c.rotate}deg) scale(${c.scale})`
         l.el.style.fontSize = `${c.fontSize}px`
@@ -185,7 +215,8 @@ export default function ScrollRail() {
           ref={(el) => {
             l.el = el
           }}
-          className="font-display absolute left-0 top-0 whitespace-pre font-semibold uppercase tracking-wide"
+          className="absolute left-0 top-0 whitespace-pre font-extrabold uppercase tracking-wide"
+          style={{ fontFamily: FONT_FAMILY }}
         >
           {l.char}
         </span>
