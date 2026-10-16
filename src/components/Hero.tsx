@@ -4,10 +4,12 @@ import GithubIcon from './icons/GithubIcon'
 import CtaLink from './CtaLink'
 import Reveal from './Reveal'
 import profilePhoto from '../assets/photos/aarav-profile.jpg'
+import CircuitField from './CircuitField'
 
 export default function Hero() {
   return (
     <section id="top" className="relative overflow-hidden bg-grid">
+      <CircuitField />
       <div className="pointer-events-none absolute -top-32 left-1/2 h-96 w-[42rem] -translate-x-1/2 rounded-full bg-accent/10 blur-[130px]" />
 
       <div className="relative mx-auto max-w-6xl px-6 pt-24 pb-20 sm:pt-32 sm:pb-28">
