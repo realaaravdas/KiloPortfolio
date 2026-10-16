@@ -17,11 +17,17 @@ const ROW_STEP = 36
 const TOP_ANCHOR = 92
 const DOCK_LETTER_GAP = 1.1
 
-// Transition timing: letters fire off STAGGER_MS apart and each takes DURATION_MS
-// to settle, so a word reads as a visible, sequential cascade rather than one
-// rigid block snapping into place.
-const STAGGER_MS = 28
-const DURATION_MS = 620
+// Where (as a fraction of viewport height, from the top) a section is
+// considered "arrived". Scroll position is mapped onto a continuous
+// activePos float against this line, so every letter's transform is a
+// pure function of scrollY — no timers, no easing after the scroll stops.
+const ACTIVATION_FRACTION = 0.25
+
+// Within each one-unit scroll segment, letters start their move this
+// fraction of the way apart, so a word cascades letter-by-letter instead
+// of moving as one rigid block, while still finishing exactly in sync
+// with the scroll (nothing is time-based).
+const STAGGER_SPAN = 0.4
 
 const FONT_FAMILY = '"Inter", system-ui, sans-serif'
 const FONT_WEIGHT = 800
@@ -33,18 +39,21 @@ function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - c, 3)
 }
 
-type Target = { x: number; y: number; rotate: number; scale: number; fontSize: number; bright: number }
-
 type Letter = {
   char: string
   sectionIndex: number
   indexInWord: number
-  from: Target
-  to: Target
-  current: Target
-  animStart: number
-  delay: number
+  wordLength: number
   el: HTMLSpanElement | null
+}
+
+type SectionLayout = {
+  activeX: number[]
+  activeY: number
+  smallX: number[]
+  smallY: number
+  dockX: number
+  dockY: number[]
 }
 
 let measureCanvas: HTMLCanvasElement | null = null
@@ -56,150 +65,226 @@ function measureWidths(text: string, fontSpec: string): number[] {
   return Array.from(text).map((ch) => ctx.measureText(ch).width)
 }
 
-function zeroTarget(): Target {
-  return { x: 0, y: 0, rotate: 0, scale: 1, fontSize: SMALL_SIZE, bright: 0 }
+async function ensureFontsLoaded() {
+  if (!document.fonts) return
+  const specs = [font(ACTIVE_SIZE), font(SMALL_SIZE), font(DOCK_SIZE)]
+  try {
+    await Promise.all(specs.map((spec) => document.fonts.load(spec)))
+    await document.fonts.ready
+  } catch {
+    // Fall back to whatever metrics are available; layout still runs.
+  }
 }
 
 export default function ScrollRail() {
-  const [activeIndex, setActiveIndex] = useState(0)
   const rafRef = useRef(0)
   const reducedMotionRef = useRef(false)
-  const firstLayoutRef = useRef(true)
+  const layoutsRef = useRef<SectionLayout[]>([])
+  const boundariesRef = useRef<number[]>([])
+  const futureStartYRef = useRef(0)
 
   const letters = useMemo(() => {
     const list: Letter[] = []
     sections.forEach((s, si) => {
-      Array.from(s.label).forEach((ch, li) => {
-        list.push({
-          char: ch,
-          sectionIndex: si,
-          indexInWord: li,
-          from: zeroTarget(),
-          to: zeroTarget(),
-          current: zeroTarget(),
-          animStart: 0,
-          delay: 0,
-          el: null,
-        })
+      const chars = Array.from(s.label)
+      chars.forEach((ch, li) => {
+        list.push({ char: ch, sectionIndex: si, indexInWord: li, wordLength: chars.length, el: null })
       })
     })
     return list
   }, [])
 
   useEffect(() => {
-    const els = sections.map((s) => document.getElementById(s.id)).filter((e): e is HTMLElement => e !== null)
-    if (els.length === 0) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting)
-        if (visible.length === 0) return
-        const topMost = visible.reduce((a, b) => (a.boundingClientRect.top < b.boundingClientRect.top ? a : b))
-        const idx = sections.findIndex((s) => s.id === topMost.target.id)
-        if (idx !== -1) setActiveIndex(idx)
-      },
-      { rootMargin: '-20% 0px -70% 0px', threshold: 0 },
-    )
-    els.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
     reducedMotionRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    function computeLayout() {
+    function buildLayouts() {
       const vw = window.innerWidth
       const vh = window.innerHeight
       const railRight = vw - 96
       const dockX = vw - 112
       const dockY = vh * 0.68
-      const futureStartY = vh * 0.84
-      const now = performance.now()
-      const instant = firstLayoutRef.current || reducedMotionRef.current
+      futureStartYRef.current = vh * 0.84
 
-      sections.forEach((s, si) => {
-        const role: 'active' | 'passed' | 'next' | 'future' =
-          si === activeIndex ? 'active' : si < activeIndex ? 'passed' : si === activeIndex + 1 ? 'next' : 'future'
-        const wordLetters = letters.filter((l) => l.sectionIndex === si)
-
-        let positions: { x: number; y: number; rotate: number; scale: number; fontSize: number; bright: number }[]
-
-        if (role === 'active' || role === 'passed') {
-          const size = role === 'active' ? ACTIVE_SIZE : SMALL_SIZE
-          const widths = measureWidths(s.label, font(size))
-          const total = widths.reduce((a, b) => a + b, 0)
-          const y = TOP_ANCHOR + si * ROW_STEP
-          let cum = 0
-          positions = widths.map((w) => {
-            const x = railRight - total + cum + w / 2
-            cum += w
-            return { x, y, rotate: 0, scale: 1, fontSize: size, bright: role === 'active' ? 1 : 0 }
-          })
-        } else if (role === 'next') {
-          const widths = measureWidths(s.label, font(DOCK_SIZE))
-          const advances = widths.map((w) => w * DOCK_LETTER_GAP)
-          const total = advances.reduce((a, b) => a + b, 0)
-          let cum = 0
-          positions = advances.map((adv) => {
-            const y = dockY + total / 2 - cum - adv / 2
-            cum += adv
-            return { x: dockX, y, rotate: -90, scale: 1, fontSize: DOCK_SIZE, bright: 0 }
-          })
-        } else {
-          const widths = measureWidths(s.label, font(SMALL_SIZE))
-          const total = widths.reduce((a, b) => a + b, 0)
-          const y = futureStartY + (si - activeIndex - 2) * ROW_STEP
-          let cum = 0
-          positions = widths.map((w) => {
-            const x = railRight - total + cum + w / 2
-            cum += w
-            return { x, y, rotate: 0, scale: 1, fontSize: SMALL_SIZE, bright: 0 }
-          })
-        }
-
-        wordLetters.forEach((l, i) => {
-          const nextTarget = positions[i]
-          l.from = instant ? nextTarget : { ...l.current }
-          l.to = nextTarget
-          l.animStart = now
-          l.delay = instant ? 0 : l.indexInWord * STAGGER_MS
-          if (instant) l.current = { ...nextTarget }
+      layoutsRef.current = sections.map((s, si) => {
+        const activeWidths = measureWidths(s.label, font(ACTIVE_SIZE))
+        const activeTotal = activeWidths.reduce((a, b) => a + b, 0)
+        let cum = 0
+        const activeX = activeWidths.map((w) => {
+          const x = railRight - activeTotal + cum + w / 2
+          cum += w
+          return x
         })
+
+        const smallWidths = measureWidths(s.label, font(SMALL_SIZE))
+        const smallTotal = smallWidths.reduce((a, b) => a + b, 0)
+        cum = 0
+        const smallX = smallWidths.map((w) => {
+          const x = railRight - smallTotal + cum + w / 2
+          cum += w
+          return x
+        })
+
+        const dockAdvances = measureWidths(s.label, font(DOCK_SIZE)).map((w) => w * DOCK_LETTER_GAP)
+        const dockTotal = dockAdvances.reduce((a, b) => a + b, 0)
+        cum = 0
+        const dockYs = dockAdvances.map((adv) => {
+          const y = dockY + dockTotal / 2 - cum - adv / 2
+          cum += adv
+          return y
+        })
+
+        return {
+          activeX,
+          activeY: TOP_ANCHOR + si * ROW_STEP,
+          smallX,
+          smallY: TOP_ANCHOR + si * ROW_STEP,
+          dockX,
+          dockY: dockYs,
+        }
       })
-
-      firstLayoutRef.current = false
     }
 
-    if (document.fonts?.ready) {
-      document.fonts.ready.then(computeLayout)
+    function buildBoundaries() {
+      const vh = window.innerHeight
+      const raw = sections.map((s) => {
+        const el = document.getElementById(s.id)
+        if (!el) return 0
+        const top = el.getBoundingClientRect().top + window.scrollY
+        return top - vh * ACTIVATION_FRACTION
+      })
+      let prev = 0
+      boundariesRef.current = raw.map((v, i) => {
+        const b = i === 0 ? Math.max(0, v) : Math.max(prev + 1, v)
+        prev = b
+        return b
+      })
     }
-    computeLayout()
 
-    window.addEventListener('resize', computeLayout)
-    return () => window.removeEventListener('resize', computeLayout)
-  }, [activeIndex, letters])
+    function recompute() {
+      buildLayouts()
+      buildBoundaries()
+    }
+
+    recompute()
+    ensureFontsLoaded().then(recompute)
+
+    window.addEventListener('resize', recompute)
+    window.addEventListener('load', recompute)
+    const settleTimer = window.setTimeout(recompute, 600)
+
+    return () => {
+      window.removeEventListener('resize', recompute)
+      window.removeEventListener('load', recompute)
+      window.clearTimeout(settleTimer)
+    }
+  }, [])
 
   useEffect(() => {
-    function tick(now: number) {
+    function computeActivePos(): number {
+      const boundaries = boundariesRef.current
+      if (boundaries.length === 0) return 0
+      const y = window.scrollY
+      if (y <= boundaries[0]) return 0
+      for (let i = 0; i < boundaries.length - 1; i++) {
+        const a = boundaries[i]
+        const b = boundaries[i + 1]
+        if (y < b) {
+          const span = b - a
+          const t = span > 0 ? (y - a) / span : 1
+          return i + Math.min(1, Math.max(0, t))
+        }
+      }
+      return boundaries.length - 1
+    }
+
+    function tick() {
+      const activePos = computeActivePos()
+      const layouts = layoutsRef.current
+      const reduced = reducedMotionRef.current
+
       for (const l of letters) {
         if (!l.el) continue
-        const elapsed = now - l.animStart - l.delay
-        const duration = reducedMotionRef.current ? 0 : DURATION_MS
-        const progress = duration <= 0 ? 1 : easeOutCubic(elapsed / duration)
-        const clamped = Math.max(0, Math.min(1, elapsed < 0 ? 0 : progress))
+        const layout = layouts[l.sectionIndex]
+        if (!layout) continue
 
-        const c = l.current
-        c.x = l.from.x + (l.to.x - l.from.x) * clamped
-        c.y = l.from.y + (l.to.y - l.from.y) * clamped
-        c.rotate = l.from.rotate + (l.to.rotate - l.from.rotate) * clamped
-        c.scale = l.from.scale + (l.to.scale - l.from.scale) * clamped
-        c.fontSize = l.from.fontSize + (l.to.fontSize - l.from.fontSize) * clamped
-        c.bright = l.from.bright + (l.to.bright - l.from.bright) * clamped
+        const rp = activePos - l.sectionIndex
+        const i = l.indexInWord
+        const N = l.wordLength
+        const letterStart = N > 1 ? (i / (N - 1)) * STAGGER_SPAN : 0
+        const letterDuration = 1 - STAGGER_SPAN
 
-        l.el.style.transform = `translate3d(${c.x}px, ${c.y}px, 0) translate(-50%, -50%) rotate(${c.rotate}deg) scale(${c.scale})`
-        l.el.style.fontSize = `${c.fontSize}px`
-        l.el.style.color = `color-mix(in srgb, var(--color-ink) ${Math.round(c.bright * 100)}%, var(--color-muted))`
+        let x: number, y: number, rotate: number, fontSize: number, bright: number
+
+        if (rp >= 1) {
+          x = layout.smallX[i]
+          y = layout.smallY
+          rotate = 0
+          fontSize = SMALL_SIZE
+          bright = 0
+        } else if (rp <= -2) {
+          x = layout.smallX[i]
+          y = futureStartYRef.current + (-rp - 2) * ROW_STEP
+          rotate = 0
+          fontSize = SMALL_SIZE
+          bright = 0
+        } else {
+          let segT: number
+          let fromX: number, fromY: number, fromRotate: number, fromSize: number, fromBright: number
+          let toX: number, toY: number, toRotate: number, toSize: number, toBright: number
+
+          if (rp < -1) {
+            segT = rp + 2
+            fromX = layout.smallX[i]
+            fromY = futureStartYRef.current
+            fromRotate = 0
+            fromSize = SMALL_SIZE
+            fromBright = 0
+            toX = layout.dockX
+            toY = layout.dockY[i]
+            toRotate = -90
+            toSize = DOCK_SIZE
+            toBright = 0
+          } else if (rp < 0) {
+            segT = rp + 1
+            fromX = layout.dockX
+            fromY = layout.dockY[i]
+            fromRotate = -90
+            fromSize = DOCK_SIZE
+            fromBright = 0
+            toX = layout.activeX[i]
+            toY = layout.activeY
+            toRotate = 0
+            toSize = ACTIVE_SIZE
+            toBright = 1
+          } else {
+            segT = rp
+            fromX = layout.activeX[i]
+            fromY = layout.activeY
+            fromRotate = 0
+            fromSize = ACTIVE_SIZE
+            fromBright = 1
+            toX = layout.smallX[i]
+            toY = layout.smallY
+            toRotate = 0
+            toSize = SMALL_SIZE
+            toBright = 0
+          }
+
+          const letterT = letterDuration > 0 ? Math.min(1, Math.max(0, (segT - letterStart) / letterDuration)) : segT
+          const eased = easeOutCubic(letterT)
+
+          x = fromX + (toX - fromX) * eased
+          y = fromY + (toY - fromY) * eased
+          rotate = reduced ? 0 : fromRotate + (toRotate - fromRotate) * eased
+          fontSize = fromSize + (toSize - fromSize) * eased
+          bright = fromBright + (toBright - fromBright) * eased
+        }
+
+        l.el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) rotate(${rotate}deg)`
+        l.el.style.fontSize = `${fontSize}px`
+        l.el.style.color = `color-mix(in srgb, var(--color-ink) ${Math.round(bright * 100)}%, var(--color-muted))`
       }
+
       rafRef.current = requestAnimationFrame(tick)
     }
 
@@ -215,7 +300,7 @@ export default function ScrollRail() {
           ref={(el) => {
             l.el = el
           }}
-          className="absolute left-0 top-0 whitespace-pre font-extrabold uppercase tracking-wide"
+          className="absolute left-0 top-0 whitespace-pre font-extrabold uppercase"
           style={{ fontFamily: FONT_FAMILY }}
         >
           {l.char}
@@ -235,17 +320,48 @@ export default function ScrollRail() {
   )
 }
 
+type Tick = { id: string; label: string; percent: number }
+
 function ProgressRuler() {
   const [progress, setProgress] = useState(0)
+  const [ticks, setTicks] = useState<Tick[]>([])
 
   useEffect(() => {
-    const onScroll = () => {
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      setProgress(docHeight > 0 ? Math.min(100, Math.max(0, (window.scrollY / docHeight) * 100)) : 0)
+    function docHeight() {
+      return document.documentElement.scrollHeight - window.innerHeight
     }
+
+    function onScroll() {
+      const dh = docHeight()
+      setProgress(dh > 0 ? Math.min(100, Math.max(0, (window.scrollY / dh) * 100)) : 0)
+    }
+
+    function computeTicks() {
+      const dh = docHeight()
+      if (dh <= 0) return
+      const next: Tick[] = []
+      sections.forEach((s) => {
+        const el = document.getElementById(s.id)
+        if (!el) return
+        const top = el.getBoundingClientRect().top + window.scrollY
+        next.push({ id: s.id, label: s.label, percent: Math.min(100, Math.max(0, (top / dh) * 100)) })
+      })
+      setTicks(next)
+    }
+
     onScroll()
+    computeTicks()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('resize', computeTicks)
+    window.addEventListener('load', computeTicks)
+    const settleTimer = window.setTimeout(computeTicks, 600)
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', computeTicks)
+      window.removeEventListener('load', computeTicks)
+      window.clearTimeout(settleTimer)
+    }
   }, [])
 
   return (
@@ -266,6 +382,19 @@ function ProgressRuler() {
       >
         {Math.round(progress)}%
       </span>
+
+      {ticks.map((t) => (
+        <button
+          key={t.id}
+          type="button"
+          onClick={() => document.getElementById(t.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+          aria-label={`Jump to ${t.label}`}
+          className="group pointer-events-auto absolute left-1/2 flex h-5 w-5 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center"
+          style={{ top: `${t.percent}%` }}
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-border transition-all duration-150 group-hover:scale-150 group-hover:bg-accent" />
+        </button>
+      ))}
     </div>
   )
 }
