@@ -30,13 +30,46 @@ const ACTIVATION_FRACTION = 0.25
 const STAGGER_SPAN = 0.4
 
 const FONT_FAMILY = '"Inter", system-ui, sans-serif'
-const FONT_WEIGHT = 800
+const FONT_WEIGHT = 700
+
+// Letters that are docking/undocking change position, rotation, and size
+// all at once, which reads as a confusing blur — and growing a letter to
+// its full size while it's still crammed into the narrow rotated dock
+// stack makes neighbors overlap. So each transition phases its properties
+// into two half-windows instead of changing everything together.
+const PHASE_SPLIT = 0.5
 
 const font = (size: number) => `${FONT_WEIGHT} ${size}px ${FONT_FAMILY}`
 
 function easeOutCubic(t: number) {
   const c = Math.min(1, Math.max(0, t))
   return 1 - Math.pow(1 - c, 3)
+}
+
+type Pose = { x: number; y: number; rotate: number; fontSize: number; bright: number }
+
+// Interpolates a single property only within [phaseStart, phaseEnd] of the
+// letter's own progress — before it, the property holds at `from`; after
+// it, it holds at `to`. Letting each segment assign its properties to
+// different windows is how we keep rotation from happening at the same
+// time as a big position jump (the thing that read as a confusing blur).
+function phaseLerp(from: number, to: number, t: number, phaseStart: number, phaseEnd: number): number {
+  if (t <= phaseStart) return from
+  if (t >= phaseEnd) return to
+  const local = phaseEnd > phaseStart ? (t - phaseStart) / (phaseEnd - phaseStart) : 1
+  return from + (to - from) * easeOutCubic(local)
+}
+
+// Brightness always fades smoothly across the whole letter window,
+// independent of whichever position/rotate/size phasing is used below.
+function blendPose(from: Pose, to: Pose, t: number, rotatePhase: [number, number], movePhase: [number, number], sizePhase: [number, number]): Pose {
+  return {
+    rotate: phaseLerp(from.rotate, to.rotate, t, rotatePhase[0], rotatePhase[1]),
+    x: phaseLerp(from.x, to.x, t, movePhase[0], movePhase[1]),
+    y: phaseLerp(from.y, to.y, t, movePhase[0], movePhase[1]),
+    fontSize: phaseLerp(from.fontSize, to.fontSize, t, sizePhase[0], sizePhase[1]),
+    bright: phaseLerp(from.bright, to.bright, t, 0, 1),
+  }
 }
 
 type Letter = {
@@ -124,7 +157,13 @@ export default function ScrollRail() {
           return x
         })
 
-        const dockAdvances = measureWidths(s.label, font(DOCK_SIZE)).map((w) => w * DOCK_LETTER_GAP)
+        // A dock slot must fit the letter both rotated (its measured width
+        // becomes the vertical extent) and, briefly mid-transition, upright
+        // (needing roughly a line-height instead) — so floor each advance
+        // at a line-height estimate, not just the rotated width.
+        const dockAdvances = measureWidths(s.label, font(DOCK_SIZE)).map(
+          (w) => Math.max(w * DOCK_LETTER_GAP, DOCK_SIZE * 1.25),
+        )
         const dockTotal = dockAdvances.reduce((a, b) => a + b, 0)
         cum = 0
         const dockYs = dockAdvances.map((adv) => {
@@ -229,55 +268,51 @@ export default function ScrollRail() {
           bright = 0
         } else {
           let segT: number
-          let fromX: number, fromY: number, fromRotate: number, fromSize: number, fromBright: number
-          let toX: number, toY: number, toRotate: number, toSize: number, toBright: number
+          let from: Pose
+          let to: Pose
+          let rotatePhase: [number, number]
+          let movePhase: [number, number]
+          let sizePhase: [number, number]
 
           if (rp < -1) {
+            // approach: glide to the dock column first while still small and
+            // upright, then rotate + grow together once in its dock slot
+            // (which is only ever spaced for the rotated, full dock size).
             segT = rp + 2
-            fromX = layout.smallX[i]
-            fromY = futureStartYRef.current
-            fromRotate = 0
-            fromSize = SMALL_SIZE
-            fromBright = 0
-            toX = layout.dockX
-            toY = layout.dockY[i]
-            toRotate = -90
-            toSize = DOCK_SIZE
-            toBright = 0
+            from = { x: layout.smallX[i], y: futureStartYRef.current, rotate: 0, fontSize: SMALL_SIZE, bright: 0 }
+            to = { x: layout.dockX, y: layout.dockY[i], rotate: -90, fontSize: DOCK_SIZE, bright: 0 }
+            rotatePhase = [PHASE_SPLIT, 1]
+            movePhase = [0, PHASE_SPLIT]
+            sizePhase = [PHASE_SPLIT, 1]
           } else if (rp < 0) {
+            // arrive: un-rotate alone first, while still small and anchored
+            // at the dock (so it never outgrows the tight dock spacing),
+            // then slide + grow together into its own wide headline slot.
             segT = rp + 1
-            fromX = layout.dockX
-            fromY = layout.dockY[i]
-            fromRotate = -90
-            fromSize = DOCK_SIZE
-            fromBright = 0
-            toX = layout.activeX[i]
-            toY = layout.activeY
-            toRotate = 0
-            toSize = ACTIVE_SIZE
-            toBright = 1
+            from = { x: layout.dockX, y: layout.dockY[i], rotate: -90, fontSize: DOCK_SIZE, bright: 0 }
+            to = { x: layout.activeX[i], y: layout.activeY, rotate: 0, fontSize: ACTIVE_SIZE, bright: 1 }
+            rotatePhase = [0, PHASE_SPLIT]
+            movePhase = [PHASE_SPLIT, 1]
+            sizePhase = [PHASE_SPLIT, 1]
           } else {
+            // leave: no rotation involved — shrink in place first, then
+            // settle into its slightly narrower passed-row slot.
             segT = rp
-            fromX = layout.activeX[i]
-            fromY = layout.activeY
-            fromRotate = 0
-            fromSize = ACTIVE_SIZE
-            fromBright = 1
-            toX = layout.smallX[i]
-            toY = layout.smallY
-            toRotate = 0
-            toSize = SMALL_SIZE
-            toBright = 0
+            from = { x: layout.activeX[i], y: layout.activeY, rotate: 0, fontSize: ACTIVE_SIZE, bright: 1 }
+            to = { x: layout.smallX[i], y: layout.smallY, rotate: 0, fontSize: SMALL_SIZE, bright: 0 }
+            rotatePhase = [0, 1]
+            movePhase = [PHASE_SPLIT, 1]
+            sizePhase = [0, PHASE_SPLIT]
           }
 
           const letterT = letterDuration > 0 ? Math.min(1, Math.max(0, (segT - letterStart) / letterDuration)) : segT
-          const eased = easeOutCubic(letterT)
+          const pose = blendPose(from, to, letterT, rotatePhase, movePhase, sizePhase)
 
-          x = fromX + (toX - fromX) * eased
-          y = fromY + (toY - fromY) * eased
-          rotate = reduced ? 0 : fromRotate + (toRotate - fromRotate) * eased
-          fontSize = fromSize + (toSize - fromSize) * eased
-          bright = fromBright + (toBright - fromBright) * eased
+          x = pose.x
+          y = pose.y
+          rotate = reduced ? 0 : pose.rotate
+          fontSize = pose.fontSize
+          bright = pose.bright
         }
 
         l.el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) rotate(${rotate}deg)`
