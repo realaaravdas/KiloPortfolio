@@ -1,97 +1,82 @@
 import { useEffect, useRef } from 'react'
 
-// A PCB-style trace network confined to the hero section. Traces sit mostly
-// dormant; moving the cursor nearby sends a glowing signal outward from the
-// nearest junction, branching and fading as it travels the board.
-const CELL = 48
-const SEED_DENSITY = 1 / 42000 // seed walks per px^2 of canvas area
-const MOUSE_RADIUS = 150
-const SPAWN_COOLDOWN_MS = 140
-const MAX_PULSES = 90
-const BRANCH_DECAY = 0.7
-const MIN_ENERGY = 0.1
-const PULSE_SPEED = 560 // px/sec
+// A handful of decorative traces wander through the hero section, mostly
+// dormant. Wherever the cursor passes near one, it bulges and glows toward
+// the cursor — the trace doesn't move to the cursor, it leans toward it —
+// then eases back to its resting shape once the cursor moves away.
+const PATH_COUNT = 4
+const SAMPLES_PER_SEGMENT = 18
+const INFLUENCE_RADIUS = 260
+const MAX_BULGE = 70
+const SPRING_RATE = 9 // higher = snappier response to the cursor
 
 const TRACE_COLOR = '56 240 216' // matches --color-accent, as an r g b triplet
 
-type Point = { x: number; y: number }
-type NodeKey = string
-type Edge = { a: NodeKey; b: NodeKey; p1: Point; p2: Point; length: number }
+type Vec = { x: number; y: number }
 
-type Pulse = {
-  edge: Edge
-  reverse: boolean
-  t: number
-  energy: number
-  cameFrom: NodeKey
+type TracePoint = {
+  base: Vec
+  disp: Vec // current eased displacement
+  glow: number
 }
 
-function key(col: number, row: number): NodeKey {
-  return `${col},${row}`
-}
+type Trace = { points: TracePoint[] }
 
-function buildNetwork(width: number, height: number) {
-  const cols = Math.max(2, Math.floor(width / CELL))
-  const rows = Math.max(2, Math.floor(height / CELL))
-  const toPoint = (col: number, row: number): Point => ({ x: col * CELL, y: row * CELL })
-
-  const adjacency = new Map<NodeKey, Edge[]>()
-  const edgeSet = new Set<string>()
-  const edges: Edge[] = []
-
-  function addEdge(c1: number, r1: number, c2: number, r2: number) {
-    const a = key(c1, r1)
-    const b = key(c2, r2)
-    const id = a < b ? `${a}|${b}` : `${b}|${a}`
-    if (edgeSet.has(id)) return
-    edgeSet.add(id)
-    const p1 = toPoint(c1, r1)
-    const p2 = toPoint(c2, r2)
-    const edge: Edge = { a, b, p1, p2, length: Math.hypot(p2.x - p1.x, p2.y - p1.y) }
-    edges.push(edge)
-    if (!adjacency.has(a)) adjacency.set(a, [])
-    if (!adjacency.has(b)) adjacency.set(b, [])
-    adjacency.get(a)!.push(edge)
-    adjacency.get(b)!.push(edge)
+function catmullRom(p0: Vec, p1: Vec, p2: Vec, p3: Vec, t: number): Vec {
+  const t2 = t * t
+  const t3 = t2 * t
+  return {
+    x:
+      0.5 *
+      (2 * p1.x +
+        (-p0.x + p2.x) * t +
+        (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t2 +
+        (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t3),
+    y:
+      0.5 *
+      (2 * p1.y +
+        (-p0.y + p2.y) * t +
+        (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t2 +
+        (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3),
   }
+}
 
-  const seedCount = Math.max(5, Math.round(width * height * SEED_DENSITY))
-  const dirs = [
-    [1, 0],
-    [-1, 0],
-    [0, 1],
-    [0, -1],
-  ]
+function buildTraces(width: number, height: number): Trace[] {
+  const traces: Trace[] = []
 
-  for (let s = 0; s < seedCount; s++) {
-    let col = Math.floor(Math.random() * cols)
-    let row = Math.floor(Math.random() * rows)
-    let dir = dirs[Math.floor(Math.random() * dirs.length)]
-    const steps = 3 + Math.floor(Math.random() * 9)
-
-    for (let i = 0; i < steps; i++) {
-      if (Math.random() > 0.72) dir = dirs[Math.floor(Math.random() * dirs.length)]
-      const nc = col + dir[0]
-      const nr = row + dir[1]
-      if (nc < 0 || nc >= cols || nr < 0 || nr >= rows) break
-      addEdge(col, row, nc, nr)
-      col = nc
-      row = nr
-      if (Math.random() < 0.08) break
+  for (let i = 0; i < PATH_COUNT; i++) {
+    const controlCount = 4 + Math.floor(Math.random() * 2)
+    const controls: Vec[] = []
+    for (let c = 0; c < controlCount; c++) {
+      controls.push({
+        x: width * (0.05 + Math.random() * 0.75),
+        y: (height * (c + Math.random() * 0.6)) / (controlCount - 1 || 1),
+      })
     }
+
+    const padded = [controls[0], ...controls, controls[controls.length - 1]]
+    const basePoints: Vec[] = []
+    for (let s = 0; s < padded.length - 3; s++) {
+      for (let j = 0; j < SAMPLES_PER_SEGMENT; j++) {
+        basePoints.push(catmullRom(padded[s], padded[s + 1], padded[s + 2], padded[s + 3], j / SAMPLES_PER_SEGMENT))
+      }
+    }
+
+    traces.push({
+      points: basePoints.map((base) => ({ base, disp: { x: 0, y: 0 }, glow: 0 })),
+    })
   }
 
-  return { edges, adjacency }
+  return traces
 }
 
 export default function CircuitField() {
   const sectionRef = useRef<HTMLDivElement | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const networkRef = useRef<{ edges: Edge[]; adjacency: Map<NodeKey, Edge[]> }>({ edges: [], adjacency: new Map() })
-  const pulsesRef = useRef<Pulse[]>([])
-  const mouseRef = useRef<Point | null>(null)
-  const lastSpawnRef = useRef(0)
+  const tracesRef = useRef<Trace[]>([])
+  const mouseRef = useRef<Vec | null>(null)
   const rafRef = useRef(0)
+  const lastTimeRef = useRef(0)
   const reducedMotionRef = useRef(false)
 
   useEffect(() => {
@@ -111,8 +96,7 @@ export default function CircuitField() {
       canvas!.style.width = `${rect.width}px`
       canvas!.style.height = `${rect.height}px`
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0)
-      networkRef.current = buildNetwork(rect.width, rect.height)
-      pulsesRef.current = []
+      tracesRef.current = buildTraces(rect.width, rect.height)
     }
 
     resize()
@@ -134,106 +118,72 @@ export default function CircuitField() {
     window.addEventListener('pointermove', onPointerMove)
     window.addEventListener('pointerout', onPointerLeaveWindow)
 
-    function nearestNode(p: Point): NodeKey | null {
-      let best: NodeKey | null = null
-      let bestDist = MOUSE_RADIUS
-      for (const edge of networkRef.current.edges) {
-        for (const [k, pt] of [
-          [edge.a, edge.p1],
-          [edge.b, edge.p2],
-        ] as const) {
-          const d = Math.hypot(pt.x - p.x, pt.y - p.y)
-          if (d < bestDist) {
-            bestDist = d
-            best = k
-          }
-        }
-      }
-      return best
-    }
-
-    function spawnFrom(node: NodeKey, energy: number, cameFrom: NodeKey) {
-      if (pulsesRef.current.length >= MAX_PULSES || energy < MIN_ENERGY) return
-      const options = (networkRef.current.adjacency.get(node) ?? []).filter(
-        (edge) => !(edge.a === cameFrom && edge.b === node) && !(edge.b === cameFrom && edge.a === node),
-      )
-      if (options.length === 0) return
-      const pick = options[Math.floor(Math.random() * options.length)]
-      pulsesRef.current.push({
-        edge: pick,
-        reverse: pick.b === node,
-        t: 0,
-        energy,
-        cameFrom: node,
-      })
-    }
-
     function tick(now: number) {
+      const dt = lastTimeRef.current ? Math.min(0.05, (now - lastTimeRef.current) / 1000) : 0
+      lastTimeRef.current = now
+
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
       const w = canvas!.width / dpr
       const h = canvas!.height / dpr
       ctx!.clearRect(0, 0, w, h)
-
-      // Dormant trace network, always faintly visible.
       ctx!.lineCap = 'round'
-      ctx!.strokeStyle = `rgb(${TRACE_COLOR} / 7%)`
-      ctx!.lineWidth = 1
-      ctx!.beginPath()
-      for (const edge of networkRef.current.edges) {
-        ctx!.moveTo(edge.p1.x, edge.p1.y)
-        ctx!.lineTo(edge.p2.x, edge.p2.y)
-      }
-      ctx!.stroke()
+      ctx!.lineJoin = 'round'
 
-      if (!reducedMotionRef.current) {
-        const mouse = mouseRef.current
-        if (mouse && now - lastSpawnRef.current > SPAWN_COOLDOWN_MS) {
-          const node = nearestNode(mouse)
-          if (node) {
-            lastSpawnRef.current = now
-            spawnFrom(node, 1, node)
+      const mouse = reducedMotionRef.current ? null : mouseRef.current
+      const springT = 1 - Math.exp(-SPRING_RATE * dt)
+
+      for (const trace of tracesRef.current) {
+        const pts = trace.points
+
+        for (const p of pts) {
+          let targetX = 0
+          let targetY = 0
+          let targetGlow = 0
+          if (mouse) {
+            const dx = mouse.x - p.base.x
+            const dy = mouse.y - p.base.y
+            const dist = Math.hypot(dx, dy)
+            if (dist < INFLUENCE_RADIUS) {
+              const falloff = Math.pow(1 - dist / INFLUENCE_RADIUS, 2)
+              const pull = Math.min(1, dist > 0 ? (MAX_BULGE * falloff) / dist : 0)
+              targetX = dx * pull
+              targetY = dy * pull
+              targetGlow = falloff
+            }
           }
+          p.disp.x += (targetX - p.disp.x) * springT
+          p.disp.y += (targetY - p.disp.y) * springT
+          p.glow += (targetGlow - p.glow) * springT
         }
 
-        const dt = 1 / 60
-        const next: Pulse[] = []
-        for (const pulse of pulsesRef.current) {
-          const advance = (PULSE_SPEED * dt) / pulse.edge.length
-          pulse.t += advance
+        // Dormant base line, always faintly present.
+        ctx!.strokeStyle = `rgb(${TRACE_COLOR} / 7%)`
+        ctx!.lineWidth = 1
+        ctx!.beginPath()
+        pts.forEach((p, i) => {
+          const x = p.base.x + p.disp.x
+          const y = p.base.y + p.disp.y
+          if (i === 0) ctx!.moveTo(x, y)
+          else ctx!.lineTo(x, y)
+        })
+        ctx!.stroke()
 
-          const { p1, p2 } = pulse.edge
-          const fromP = pulse.reverse ? p2 : p1
-          const toP = pulse.reverse ? p1 : p2
-          const clampedT = Math.min(1, pulse.t)
-          const x = fromP.x + (toP.x - fromP.x) * clampedT
-          const y = fromP.y + (toP.y - fromP.y) * clampedT
-
-          // Light up the trace behind the pulse head.
-          ctx!.strokeStyle = `rgb(${TRACE_COLOR} / ${Math.round(pulse.energy * 55)}%)`
-          ctx!.lineWidth = 1.5
+        // Glowing overlay only where the trace is currently bulging.
+        ctx!.shadowColor = `rgb(${TRACE_COLOR} / 70%)`
+        for (let i = 0; i < pts.length - 1; i++) {
+          const a = pts[i]
+          const b = pts[i + 1]
+          const glow = (a.glow + b.glow) / 2
+          if (glow < 0.04) continue
+          ctx!.shadowBlur = 8 * glow
+          ctx!.strokeStyle = `rgb(${TRACE_COLOR} / ${Math.round(Math.min(1, glow) * 85)}%)`
+          ctx!.lineWidth = 1 + glow
           ctx!.beginPath()
-          ctx!.moveTo(fromP.x, fromP.y)
-          ctx!.lineTo(x, y)
+          ctx!.moveTo(a.base.x + a.disp.x, a.base.y + a.disp.y)
+          ctx!.lineTo(b.base.x + b.disp.x, b.base.y + b.disp.y)
           ctx!.stroke()
-
-          const glow = ctx!.createRadialGradient(x, y, 0, x, y, 7)
-          glow.addColorStop(0, `rgb(${TRACE_COLOR} / ${Math.round(pulse.energy * 90)}%)`)
-          glow.addColorStop(1, `rgb(${TRACE_COLOR} / 0%)`)
-          ctx!.fillStyle = glow
-          ctx!.beginPath()
-          ctx!.arc(x, y, 7, 0, Math.PI * 2)
-          ctx!.fill()
-
-          if (pulse.t < 1) {
-            next.push(pulse)
-          } else {
-            const arrivedNode = pulse.reverse ? pulse.edge.a : pulse.edge.b
-            spawnFrom(arrivedNode, pulse.energy * BRANCH_DECAY, pulse.cameFrom)
-            // Occasionally branch twice at a junction for a livelier spread.
-            if (Math.random() < 0.3) spawnFrom(arrivedNode, pulse.energy * BRANCH_DECAY, pulse.cameFrom)
-          }
         }
-        pulsesRef.current = next
+        ctx!.shadowBlur = 0
       }
 
       rafRef.current = requestAnimationFrame(tick)
