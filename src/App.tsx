@@ -7,13 +7,13 @@ import Skills from './components/Skills'
 import Education from './components/Education'
 import Contact from './components/Contact'
 import Cursor from './components/Cursor'
-import ScrollRail from './components/ScrollRail'
+import ScrollIndicator from './components/ScrollIndicator'
 
 export default function App() {
   return (
     <div className="min-h-screen bg-bg text-ink">
       <Cursor />
-      <ScrollRail />
+      <ScrollIndicator />
       <Nav />
       <main>
         <Hero />
