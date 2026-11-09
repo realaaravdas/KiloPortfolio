@@ -5,6 +5,7 @@ import Carousel from './Carousel'
 import { projects } from '../data/resume'
 import rustRacerPoster from '../assets/photos/rust-racer-poster.jpg'
 import xnavBanner from '../assets/photos/xnav-banner.jpg'
+import neuron7Banner from '../assets/photos/neuron7-banner.jpg'
 import collegeCompass1 from '../assets/photos/college-compass-1.jpg'
 import collegeCompass2 from '../assets/photos/college-compass-2.jpg'
 import collegeCompass3 from '../assets/photos/college-compass-3.jpg'
@@ -45,6 +46,11 @@ const projectMedia: Record<string, ProjectMedia> = {
       { src: codedocs2, alt: 'CodeDocs custom prompt field and Generate Documentation button' },
       { src: codedocs3, alt: 'CodeDocs with a project folder uploaded, showing its file tree' },
     ],
+  },
+  neuron7: {
+    type: 'banner',
+    src: neuron7Banner,
+    alt: 'neuron7 annotating a research paper in Sharpie mode, with margin notes and a notes panel on the right',
   },
 }
 
