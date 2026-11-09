@@ -122,6 +122,7 @@ export const projects: Project[] = [
       'Deterministically mines acronyms the paper already defines itself in Rust, sending only genuinely undefined ones to the model, and generates a TL;DR plus a Rust-rendered summary PDF.',
     ],
     tags: ['Rust', 'Tauri', 'Local LLM', 'PDF Processing', 'Desktop App'],
+    featured: true,
   },
   {
     title: 'College Compass',
