@@ -66,6 +66,7 @@ export type Project = {
   bullets: string[]
   tags: string[]
   featured?: boolean
+  link?: { label: string; href: string }
 }
 
 export const projects: Project[] = [
@@ -123,6 +124,7 @@ export const projects: Project[] = [
     ],
     tags: ['Rust', 'Tauri', 'Local LLM', 'PDF Processing', 'Desktop App'],
     featured: true,
+    link: { label: 'Project site', href: 'https://realaaravdas.github.io/neuron7/#top' },
   },
   {
     title: 'College Compass',
