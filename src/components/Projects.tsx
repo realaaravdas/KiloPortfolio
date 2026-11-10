@@ -1,4 +1,4 @@
-import { Sparkles } from 'lucide-react'
+import { ExternalLink, Sparkles } from 'lucide-react'
 import SectionHeading from './SectionHeading'
 import Reveal from './Reveal'
 import Carousel from './Carousel'
@@ -84,6 +84,18 @@ export default function Projects() {
 
               <div className="flex items-start justify-between gap-3">
                 <h3 className="font-display text-lg font-semibold text-ink">{p.title}</h3>
+                {p.link && (
+                  <a
+                    href={p.link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    data-cursor-hover
+                    className="flex shrink-0 items-center gap-1 font-mono text-xs text-accent hover:underline"
+                  >
+                    {p.link.label}
+                    <ExternalLink size={12} />
+                  </a>
+                )}
               </div>
               <p className="mt-1 font-mono text-xs text-muted">{p.period}</p>
 
