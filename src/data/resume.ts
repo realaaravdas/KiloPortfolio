@@ -112,19 +112,20 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    title: 'neuron7',
+    title: 'fyrno7',
     period: 'Personal Project',
     description:
-      'A desktop app that reads a research paper and marks it up the way a person would — hand-drawn highlights, margin notes, and a companion summary doc — powered entirely by a local LLM, so nothing leaves your computer.',
+      'A free, open-source desktop app (formerly neuron7) that reads a research paper and marks it up the way a person would — hand-drawn highlights, margin notes, and a companion summary doc — powered entirely by a local LLM, so nothing leaves your computer.',
     bullets: [
       'Built a Rust/Tauri 2 desktop app with a dependency-free HTML/CSS/JS frontend (vendored pdf.js, no Node toolchain) that talks to any OpenAI-compatible local LLM server — LM Studio, Ollama, llama.cpp, vLLM.',
       'Two independent annotation styles: hand-drawn "Sharpie" markup (highlights, underlines, circled terms, margin notes) and a "Professional" mode with categorized highlights and numbered review comments, plus a companion notes document (overview, methods, results, glossary) exportable as Markdown or HTML.',
       "Verifies every LLM-generated quote against the PDF's actual extracted text in Rust before rendering it, rejecting hallucinated citations.",
       'Deterministically mines acronyms the paper already defines itself in Rust, sending only genuinely undefined ones to the model, and generates a TL;DR plus a Rust-rendered summary PDF.',
+      'MIT-licensed with no accounts and no telemetry, shipping installers for Windows, macOS, and Linux alongside an in-browser demo.',
     ],
     tags: ['Rust', 'Tauri', 'Local LLM', 'PDF Processing', 'Desktop App'],
     featured: true,
-    link: { label: 'Project site', href: 'https://realaaravdas.github.io/neuron7/#top' },
+    link: { label: 'Project site', href: 'https://realaaravdas.github.io/fyrno7/' },
   },
   {
     title: 'College Compass',
