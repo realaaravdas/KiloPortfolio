@@ -12,7 +12,7 @@ export const profile = {
 
 export const stats = [
   { label: 'Years on FRC Code Team', value: '4+' },
-  { label: 'Personal Projects', value: '8' },
+  { label: 'Personal Projects', value: '9' },
   { label: 'Internship', value: 'CurieTech AI' },
   { label: 'Published Paper', value: '1' },
 ]
@@ -126,6 +126,22 @@ export const projects: Project[] = [
     tags: ['Rust', 'Tauri', 'Local LLM', 'PDF Processing', 'Desktop App'],
     featured: true,
     link: { label: 'Project site', href: 'https://realaaravdas.github.io/fyrno7/' },
+  },
+  {
+    title: 'Elenchia',
+    period: 'Personal Project',
+    description:
+      'A local-first desktop app where you staff a lab of specialized AI agents — hypothesis generator, critic, experimentalist, statistician — and direct them through a research question instead of chatting with a single assistant. You are the ethics and approval layer; nothing consequential runs without your sign-off.',
+    bullets: [
+      'Built a Rust/Tauri 2 desktop app (black-and-white vanilla-JS UI with a canvas "living diagram") orchestrating six adversarial agent roles through a seven-step protocol — frame, hypothesize, challenge, design, approve, analyze, promote — with human approval gates at every consequential step.',
+      'Runs experiments as real Python in an isolated sandbox (separate process, scrubbed environment, static code scan, network blocked, wall-clock and output caps), with a built-in kernel fallback when Python is unavailable.',
+      'Every event is written to an append-only, hash-chained SQLite log that the entire UI is a reduction over, so any past moment can be replayed exactly.',
+      'Agents run entirely on local models via Ollama or LM Studio (or an OpenAI-compatible endpoint, opt-in); automatic recovery repairs malformed model output deterministically and retries with adapted prompts before surfacing a manual-fix gate.',
+      'Added literature search (OpenAlex/Semantic Scholar) and a sandboxed, throwaway-profile Chromium an agent can drive to open a specific page — both gated behind per-request human approval — plus parallel experiment pipelines and notebook export/import.',
+    ],
+    tags: ['Rust', 'Tauri', 'Local LLM', 'Multi-Agent Systems', 'SQLite', 'Desktop App'],
+    featured: true,
+    link: { label: 'Project site', href: 'https://realaaravdas.github.io/elenchia/' },
   },
   {
     title: 'College Compass',

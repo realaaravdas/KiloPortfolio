@@ -6,6 +6,7 @@ import { projects } from '../data/resume'
 import rustRacerPoster from '../assets/photos/rust-racer-poster.jpg'
 import xnavBanner from '../assets/photos/xnav-banner.jpg'
 import fyrno7Banner from '../assets/photos/fyrno7-banner.jpg'
+import elenchiaBanner from '../assets/photos/elenchia-banner.jpg'
 import collegeCompass1 from '../assets/photos/college-compass-1.jpg'
 import collegeCompass2 from '../assets/photos/college-compass-2.jpg'
 import collegeCompass3 from '../assets/photos/college-compass-3.jpg'
@@ -51,6 +52,11 @@ const projectMedia: Record<string, ProjectMedia> = {
     type: 'banner',
     src: fyrno7Banner,
     alt: 'fyrno7 annotating a research paper in Sharpie mode, with hand-drawn margin notes and a notes panel on the right',
+  },
+  Elenchia: {
+    type: 'banner',
+    src: elenchiaBanner,
+    alt: "Elenchia's living diagram showing agent roles debating a hypothesis, with the lab manager's comment bubble open",
   },
 }
 
