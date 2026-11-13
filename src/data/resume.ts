@@ -99,17 +99,20 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    title: 'Code-to-CAD Generator',
+    title: 'Elenchia',
     period: 'Personal Project',
     description:
-      'A Python application, built from scratch, that compiles a custom design language into CAD geometry with a live rendering pipeline to preview the results.',
+      'A local-first desktop app where you staff a lab of specialized AI agents — hypothesis generator, critic, experimentalist, statistician — and direct them through a research question instead of chatting with a single assistant. You are the ethics and approval layer; nothing consequential runs without your sign-off.',
     bullets: [
-      'Designed a small custom language for describing CAD geometry in code.',
-      'Built a parser and rendering pipeline that compiles that language into previewable 3D models.',
-      'Prototyping an AI assistant to help generate and refine designs conversationally.',
+      'Built a Rust/Tauri 2 desktop app (black-and-white vanilla-JS UI with a canvas "living diagram") orchestrating six adversarial agent roles through a seven-step protocol — frame, hypothesize, challenge, design, approve, analyze, promote — with human approval gates at every consequential step.',
+      'Runs experiments as real Python in an isolated sandbox (separate process, scrubbed environment, static code scan, network blocked, wall-clock and output caps), with a built-in kernel fallback when Python is unavailable.',
+      'Every event is written to an append-only, hash-chained SQLite log that the entire UI is a reduction over, so any past moment can be replayed exactly.',
+      'Agents run entirely on local models via Ollama or LM Studio (or an OpenAI-compatible endpoint, opt-in); automatic recovery repairs malformed model output deterministically and retries with adapted prompts before surfacing a manual-fix gate.',
+      'Added literature search (OpenAlex/Semantic Scholar) and a sandboxed, throwaway-profile Chromium an agent can drive to open a specific page — both gated behind per-request human approval — plus parallel experiment pipelines and notebook export/import.',
     ],
-    tags: ['Python', 'CAD', 'Rendering', 'Language Design'],
+    tags: ['Rust', 'Tauri', 'Local LLM', 'Multi-Agent Systems', 'SQLite', 'Desktop App'],
     featured: true,
+    link: { label: 'Project site', href: 'https://realaaravdas.github.io/elenchia/' },
   },
   {
     title: 'fyrno7',
@@ -128,20 +131,17 @@ export const projects: Project[] = [
     link: { label: 'Project site', href: 'https://realaaravdas.github.io/fyrno7/' },
   },
   {
-    title: 'Elenchia',
+    title: 'Code-to-CAD Generator',
     period: 'Personal Project',
     description:
-      'A local-first desktop app where you staff a lab of specialized AI agents — hypothesis generator, critic, experimentalist, statistician — and direct them through a research question instead of chatting with a single assistant. You are the ethics and approval layer; nothing consequential runs without your sign-off.',
+      'A Python application, built from scratch, that compiles a custom design language into CAD geometry with a live rendering pipeline to preview the results.',
     bullets: [
-      'Built a Rust/Tauri 2 desktop app (black-and-white vanilla-JS UI with a canvas "living diagram") orchestrating six adversarial agent roles through a seven-step protocol — frame, hypothesize, challenge, design, approve, analyze, promote — with human approval gates at every consequential step.',
-      'Runs experiments as real Python in an isolated sandbox (separate process, scrubbed environment, static code scan, network blocked, wall-clock and output caps), with a built-in kernel fallback when Python is unavailable.',
-      'Every event is written to an append-only, hash-chained SQLite log that the entire UI is a reduction over, so any past moment can be replayed exactly.',
-      'Agents run entirely on local models via Ollama or LM Studio (or an OpenAI-compatible endpoint, opt-in); automatic recovery repairs malformed model output deterministically and retries with adapted prompts before surfacing a manual-fix gate.',
-      'Added literature search (OpenAlex/Semantic Scholar) and a sandboxed, throwaway-profile Chromium an agent can drive to open a specific page — both gated behind per-request human approval — plus parallel experiment pipelines and notebook export/import.',
+      'Designed a small custom language for describing CAD geometry in code.',
+      'Built a parser and rendering pipeline that compiles that language into previewable 3D models.',
+      'Prototyping an AI assistant to help generate and refine designs conversationally.',
     ],
-    tags: ['Rust', 'Tauri', 'Local LLM', 'Multi-Agent Systems', 'SQLite', 'Desktop App'],
+    tags: ['Python', 'CAD', 'Rendering', 'Language Design'],
     featured: true,
-    link: { label: 'Project site', href: 'https://realaaravdas.github.io/elenchia/' },
   },
   {
     title: 'College Compass',
